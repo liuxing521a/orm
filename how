@@ -1,0 +1,2381 @@
+[33mcommit 3b20c1778844b9d689cf81c1894082227fe3a888[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu May 28 17:53:36 2015 +0800
+
+    dbpool
+
+ build.gradle                                       |   17 [32m+[m[31m-[m
+ common/build.gradle                                |   51 [32m+[m
+ .../src/main/java/org/itas/util/Base64Coder.java   |  128 [32m++[m
+ common/src/main/java/org/itas/util/GUID.java       |   91 [32m+[m
+ .../src/main/java/org/itas/util/GenericInfo.java   |   85 [32m+[m
+ .../src/main/java/org/itas/util/ItasException.java |   22 [32m+[m
+ common/src/main/java/org/itas/util/Logger.java     |  181 [32m++[m
+ common/src/main/java/org/itas/util/Pair.java       |   59 [32m+[m
+ .../main/java/org/itas/util/ScheduledExecutor.java |  117 [32m++[m
+ common/src/main/java/org/itas/util/TextUtils.java  |    5 [32m+[m
+ common/src/main/java/org/itas/util/Utils.java      | 1784 [32m++++++++++++++++++[m
+ .../src/main/java/org/itas/util/XClassLoader.java  |  119 [32m++[m
+ common/src/main/java/org/itas/util/XResources.java |  137 [32m++[m
+ .../src/main/java/org/itas/util/cache/Cache.java   |   74 [32m+[m
+ .../main/java/org/itas/util/cache/CacheSizes.java  |  192 [32m++[m
+ .../main/java/org/itas/util/cache/Cacheable.java   |   18 [32m+[m
+ .../itas/util/cache/CalculateSizeException.java    |   13 [32m+[m
+ .../main/java/org/itas/util/cache/LinkedList.java  |  115 [32m++[m
+ .../main/java/org/itas/util/cache/LocalCache.java  |  563 [32m++++++[m
+ .../org/itas/util/collection/CircularQueue.java    |  130 [32m++[m
+ .../java/org/itas/util/collection/IntHashMap.java  |  646 [32m+++++++[m
+ .../java/org/itas/util/collection/LimitList.java   |  156 [32m++[m
+ .../java/org/itas/util/collection/SortedList.java  |  192 [32m++[m
+ .../main/java/org/itas/util/http/AbstractHttp.java |  417 [32m++++[m
+ .../main/java/org/itas/util/http/HttpClient.java   |   52 [32m+[m
+ .../main/java/org/itas/util/http/HttpsClient.java  |   85 [32m+[m
+ .../java/org/itas/util/thread/ControlThread.java   |   89 [32m+[m
+ .../main/java/org/itas/util/thread/ThreadPool.java |  360 [32m++++[m
+ .../java/org/itas/util/thread/ThreadPoolDog.java   |   67 [32m+[m
+ common/src/main/resources/logback-test.xml         |   96 [32m+[m
+ common/src/main/resources/logback-test.xml.file    |  154 [32m++[m
+ common/src/test/java/net/itas/util/TestAll.java    |   13 [32m+[m
+ common/src/test/java/net/itas/util/TestClazzs.java |   67 [32m+[m
+ .../test/java/org/itas/util/GenericInfoTest.java   |   10 [32m+[m
+ core/src/main/java/org/itas/core/CacheBean.java    |    4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Dispatch.java     |    2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/GameBase.java     |    4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Pool.java         |    2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/PoolImpl.java     |    8 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Syner.java        |    2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/User.java         |    2 [32m+[m[31m-[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |    2 [32m+[m[31m-[m
+ .../itas/core/bytecode/AbstractMethodProvider.java |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDCloneProvider.java    |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDDoDeleteProvider.java |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDDoFillProvider.java   |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDDoInsertProvider.java |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDDoSelectProvider.java |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDDoUpdateProvider.java |    2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDSetterProvider.java   |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/cache/LocalCache.java  |    4 [32m+[m[31m-[m
+ .../java/org/itas/core/database/DBPoolImpl.java    |    6 [32m+[m[31m-[m
+ .../org/itas/core/database/SQLExecutorImpl.java    |    2 [32m+[m[31m-[m
+ .../org/itas/core/database/SynerThreadImpl.java    |    4 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/dbpool/BoneCP.java |  654 [32m+++++++[m
+ .../java/org/itas/core/dbpool/BoneCPConfig.java    | 1082 [32m+++++++++++[m
+ .../itas/core/dbpool/CallableStatementHandle.java  | 1993 [32m++++++++++++++++++++[m
+ .../org/itas/core/dbpool/CloseThreadMonitor.java   |   75 [32m+[m
+ .../org/itas/core/dbpool/ConnectionHandle.java     | 1281 [32m+++++++++++++[m
+ .../org/itas/core/dbpool/ConnectionPartition.java  |  282 [32m+++[m
+ .../itas/core/dbpool/ConnectionTesterThread.java   |  139 [32m++[m
+ .../org/itas/core/dbpool/CustomThreadFactory.java  |   77 [32m+[m
+ .../java/org/itas/core/dbpool/IStatementCache.java |  158 [32m++[m
+ .../main/java/org/itas/core/dbpool/PoolUtil.java   |  179 [32m++[m
+ .../java/org/itas/core/dbpool/PoolWatchThread.java |  116 [32m++[m
+ .../itas/core/dbpool/PreparedStatementHandle.java  | 1177 [32m++++++++++++[m
+ .../org/itas/core/dbpool/ReleaseHelperThread.java  |   82 [32m+[m
+ .../main/java/org/itas/core/dbpool/ReplayLog.java  |   98 [32m+[m
+ .../java/org/itas/core/dbpool/StatementCache.java  |  253 [32m+++[m
+ .../java/org/itas/core/dbpool/StatementHandle.java | 1071 [32m+++++++++++[m
+ .../core/dbpool/hooks/AbstractConnectionHook.java  |   98 [32m+[m
+ .../itas/core/dbpool/hooks/AcquireFailConfig.java  |   95 [32m+[m
+ .../org/itas/core/dbpool/hooks/ConnectionHook.java |  114 [32m++[m
+ .../org/itas/core/dbpool/hooks/package-info.java   |   27 [32m+[m
+ .../java/org/itas/core/dbpool/package-info.java    |   24 [32m+[m
+ .../java/org/itas/core/dispatch/HookDispatch.java  |    2 [32m+[m[31m-[m
+ .../java/org/itas/core/dispatch/ItasDispatch.java  |    4 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/net/GameScene.java |    2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/net/GameWorld.java |    2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/net/IoUtil.java   |    2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/net/Message.java  |    4 [32m+[m[31m-[m
+ .../java/org/itas/core/net/MessageDecoder.java     |    2 [32m+[m[31m-[m
+ .../java/org/itas/core/net/NioClientHandler.java   |    2 [32m+[m[31m-[m
+ .../java/org/itas/core/net/NioServerHandler.java   |    2 [32m+[m[31m-[m
+ .../java/org/itas/core/resources/AbstractXml.java  |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resources/XmlBean.java |    4 [32m+[m[31m-[m
+ .../java/org/itas/core/resources/XmlLoader.java    |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/ClassLoaders.java |    4 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/Constructors.java |    2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/util/DataBase.java |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/ItContainer.java  |    4 [32m+[m[31m-[m
+ .../java/org/itas/core/util/UUIDGenerator.java     |    2 [32m+[m[31m-[m
+ .../org/itas/core/util/DataContainersTest.java     |    2 [32m+[m[31m-[m
+ settings.gradle                                    |    2 [32m+[m[31m-[m
+ utils/build.gradle                                 |    2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/common/Base64Coder.java |  128 [32m++[m
+ utils/src/main/java/org/itas/common/GUID.java      |   91 [32m+[m
+ .../src/main/java/org/itas/common/GenericInfo.java |   85 [32m+[m
+ .../main/java/org/itas/common/ItasException.java   |   22 [32m+[m
+ utils/src/main/java/org/itas/common/Logger.java    |  181 [32m++[m
+ utils/src/main/java/org/itas/common/Pair.java      |   59 [32m+[m
+ .../java/org/itas/common/ScheduledExecutor.java    |  117 [32m++[m
+ utils/src/main/java/org/itas/common/TextUtils.java |    5 [32m+[m
+ utils/src/main/java/org/itas/common/Utils.java     | 1784 [32m++++++++++++++++++[m
+ .../main/java/org/itas/common/XClassLoader.java    |  119 [32m++[m
+ .../src/main/java/org/itas/common/XResources.java  |  137 [32m++[m
+ .../src/main/java/org/itas/common/cache/Cache.java |   74 [32m+[m
+ .../java/org/itas/common/cache/CacheSizes.java     |  192 [32m++[m
+ .../main/java/org/itas/common/cache/Cacheable.java |   18 [32m+[m
+ .../itas/common/cache/CalculateSizeException.java  |   13 [32m+[m
+ .../java/org/itas/common/cache/LinkedList.java     |  115 [32m++[m
+ .../java/org/itas/common/cache/LocalCache.java     |  563 [32m++++++[m
+ .../org/itas/common/collection/CircularQueue.java  |  130 [32m++[m
+ .../org/itas/common/collection/IntHashMap.java     |  646 [32m+++++++[m
+ .../java/org/itas/common/collection/LimitList.java |  156 [32m++[m
+ .../org/itas/common/collection/SortedList.java     |  192 [32m++[m
+ .../java/org/itas/common/http/AbstractHttp.java    |  417 [32m++++[m
+ .../main/java/org/itas/common/http/HttpClient.java |   52 [32m+[m
+ .../java/org/itas/common/http/HttpsClient.java     |   85 [32m+[m
+ .../java/org/itas/common/json/BaseJsonReader.java  |   24 [32m+[m
+ utils/src/main/java/org/itas/common/json/Json.java | 1020 [32m++++++++++[m
+ .../main/java/org/itas/common/json/JsonReader.java |  687 [32m+++++++[m
+ .../main/java/org/itas/common/json/JsonReader.rl   |  332 [32m++++[m
+ .../main/java/org/itas/common/json/JsonValue.java  |  638 [32m+++++++[m
+ .../main/java/org/itas/common/json/JsonWriter.java |  190 [32m++[m
+ .../main/java/org/itas/common/logger/Level.java    |    6 [32m+[m
+ .../main/java/org/itas/common/logger/Logger.java   |  280 [32m+++[m
+ .../java/org/itas/common/logger/LoggerFactory.java |  112 [32m++[m
+ .../itas/common/logger/LoggerFactorySupport.java   |   60 [32m+[m
+ .../itas/common/logger/support/FailsafeLogger.java |  434 [32m+++++[m
+ .../common/logger/support/FormattingTuple.java     |  420 [32m+++++[m
+ .../org/itas/common/logger/support/JdkLogger.java  |  250 [32m+++[m
+ .../common/logger/support/JdkLoggerFactory.java    |  170 [32m++[m
+ .../itas/common/logger/support/Log4jLogger.java    |  250 [32m+++[m
+ .../common/logger/support/Logger4jFactory.java     |  144 [32m++[m
+ .../common/logger/support/MessageFormatter.java    |  427 [32m+++++[m
+ .../org/itas/common/logger/support/Sf4jLogger.java |  233 [32m+++[m
+ .../common/logger/support/Sf4jLoggerFactory.java   |  143 [32m++[m
+ .../org/itas/common/threadpool/ControlThread.java  |   89 [32m+[m
+ .../org/itas/common/threadpool/ThreadPool.java     |  360 [32m++++[m
+ .../org/itas/common/threadpool/ThreadPoolDog.java  |   67 [32m+[m
+ .../main/java/org/itas/common/xml/XmlReader.java   |  713 [32m+++++++[m
+ .../src/main/java/org/itas/common/xml/XmlReader.rl |  503 [32m+++++[m
+ .../main/java/org/itas/common/xml/XmlWriter.java   |  136 [32m++[m
+ utils/src/main/java/org/itas/util/Base64Coder.java |  128 [31m--[m
+ utils/src/main/java/org/itas/util/GUID.java        |   91 [31m-[m
+ utils/src/main/java/org/itas/util/GenericInfo.java |   85 [31m-[m
+ .../src/main/java/org/itas/util/ItasException.java |   22 [31m-[m
+ utils/src/main/java/org/itas/util/Logger.java      |  181 [31m--[m
+ utils/src/main/java/org/itas/util/Pair.java        |   59 [31m-[m
+ .../main/java/org/itas/util/ScheduledExecutor.java |  117 [31m--[m
+ utils/src/main/java/org/itas/util/TextUtils.java   |    5 [31m-[m
+ utils/src/main/java/org/itas/util/Utils.java       | 1784 [31m------------------[m
+ .../src/main/java/org/itas/util/XClassLoader.java  |  119 [31m--[m
+ utils/src/main/java/org/itas/util/XResources.java  |  137 [31m--[m
+ utils/src/main/java/org/itas/util/cache/Cache.java |   74 [31m-[m
+ .../main/java/org/itas/util/cache/CacheSizes.java  |  192 [31m--[m
+ .../main/java/org/itas/util/cache/Cacheable.java   |   18 [31m-[m
+ .../itas/util/cache/CalculateSizeException.java    |   13 [31m-[m
+ .../main/java/org/itas/util/cache/LinkedList.java  |  115 [31m--[m
+ .../main/java/org/itas/util/cache/LocalCache.java  |  563 [31m------[m
+ .../org/itas/util/collection/CircularQueue.java    |  130 [31m--[m
+ .../java/org/itas/util/collection/IntHashMap.java  |  646 [31m-------[m
+ .../java/org/itas/util/collection/LimitList.java   |  156 [31m--[m
+ .../java/org/itas/util/collection/SortedList.java  |  192 [31m--[m
+ .../main/java/org/itas/util/http/AbstractHttp.java |  417 [31m----[m
+ .../main/java/org/itas/util/http/HttpClient.java   |   52 [31m-[m
+ .../main/java/org/itas/util/http/HttpsClient.java  |   85 [31m-[m
+ .../java/org/itas/util/thread/ControlThread.java   |   89 [31m-[m
+ .../main/java/org/itas/util/thread/ThreadPool.java |  360 [31m----[m
+ .../java/org/itas/util/thread/ThreadPoolDog.java   |   67 [31m-[m
+ .../java/com/jolbox/bonecp/CommonTestUtils.java    |  207 [32m++[m
+ .../test/java/com/jolbox/bonecp/MockThread.java    |   44 [32m+[m
+ .../test/java/com/jolbox/bonecp/TestBoneCP.java    |  871 [32m+++++++++[m
+ .../java/com/jolbox/bonecp/TestBoneCPConfig.java   |  163 [32m++[m
+ .../jolbox/bonecp/TestCallableStatementHandle.java |   80 [32m+[m
+ .../com/jolbox/bonecp/TestCloseThreadMonitor.java  |  132 [32m++[m
+ .../com/jolbox/bonecp/TestConnectionHandle.java    |  717 [32m+++++++[m
+ .../com/jolbox/bonecp/TestConnectionPartition.java |  171 [32m++[m
+ .../jolbox/bonecp/TestConnectionThreadTester.java  |  292 [32m+++[m
+ .../com/jolbox/bonecp/TestCustomThreadFactory.java |   76 [32m+[m
+ .../com/jolbox/bonecp/TestPoolWatchThread.java     |  268 [32m+++[m
+ .../jolbox/bonecp/TestPreparedStatementHandle.java |   84 [32m+[m
+ .../com/jolbox/bonecp/TestReleaseHelperThread.java |  123 [32m++[m
+ .../java/com/jolbox/bonecp/TestStatementCache.java |  340 [32m++++[m
+ .../com/jolbox/bonecp/TestStatementHandle.java     |  213 [32m+++[m
+ .../java/com/jolbox/bonecp/TestSystemTests.java    |  410 [32m++++[m
+ .../test/java/com/jolbox/bonecp/ThreadTester.java  |  104 [32m+[m
+ .../java/com/jolbox/bonecp/hooks/CoverageHook.java |   31 [32m+[m
+ .../java/com/jolbox/bonecp/hooks/CustomHook.java   |   70 [32m+[m
+ .../jolbox/bonecp/hooks/TestConnectionHook.java    |  179 [32m++[m
+ utils/src/test/java/net/itas/util/TestClazzs.java  |    6 [32m+[m[31m-[m
+ utils/src/test/resources/log4j.properties          |    8 [32m+[m
+ 193 files changed, 33087 insertions(+), 5956 deletions(-)
+
+[33mcommit 7748342940e52d95f6d5254557e6b0c53889057d[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Apr 23 16:59:24 2015 +0800
+
+    add cachebean cached data
+
+ core/src/main/java/org/itas/core/BindManager.java  | 217 [31m---------[m
+ core/src/main/java/org/itas/core/CacheBean.java    | 252 [32m+++++++++++[m
+ core/src/main/java/org/itas/core/GameBase.java     | 135 [32m+++[m[31m---[m
+ core/src/main/java/org/itas/core/GameObject.java   |  16 [32m+[m[31m-[m
+ .../main/java/org/itas/core/GameObjectAotuID.java  |  13 [31m-[m
+ .../main/java/org/itas/core/IllnessException.java  |  22 [31m-[m
+ core/src/main/java/org/itas/core/Pool.java         | 198 [32m++++[m[31m-----[m
+ core/src/main/java/org/itas/core/PoolImpl.java     | 483 [32m++++++++[m[31m-------------[m
+ core/src/main/java/org/itas/core/SQLExecutor.java  |  30 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/ServerModule.java |   2 [31m-[m
+ core/src/main/java/org/itas/core/Simple.java       |  77 [32m++[m[31m--[m
+ core/src/main/java/org/itas/core/Syner.java        | 338 [32m+++[m[31m-----------[m
+ .../main/java/org/itas/core/UnDeFineException.java |  22 [31m-[m
+ .../java/org/itas/core/UnsupportException.java     |  22 [31m-[m
+ .../itas/core/bytecode/FDContainerProvider.java    |   1 [31m-[m
+ .../core/bytecode/FDGameObjectAutoProvider.java    |   2 [31m-[m
+ .../itas/core/bytecode/FDGameObjectProvider.java   |   2 [31m-[m
+ .../org/itas/core/bytecode/MDGetterProvider.java   |   1 [31m-[m
+ .../org/itas/core/bytecode/MDSetterProvider.java   |   1 [31m-[m
+ .../itas/core/bytecode/MDTotolSizeProvider.java    |   2 [31m-[m
+ .../org/itas/core/bytecode/UnDeFineException.java  |  22 [32m+[m
+ .../org/itas/core/bytecode/UnsupportException.java |  22 [32m+[m
+ .../java/org/itas/core/database/DBManager.java     |   4 [32m+[m[31m-[m
+ .../org/itas/core/database/SQLExecutorImpl.java    |  12 [32m+[m[31m-[m
+ .../org/itas/core/database/SynerThreadImpl.java    |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/resources/XmlManager.java   |   1 [31m-[m
+ .../java/org/itas/core/util/DataContainers.java    | 340 [31m---------------[m
+ .../main/java/org/itas/core/util/ItContainer.java  | 307 [32m+++++++++++++[m
+ .../bytecode/FDGameObjectAutoIdProviderTest.java   |   1 [31m-[m
+ .../core/bytecode/FDGameObjectProviderTest.java    |   1 [31m-[m
+ .../src/test/java/org/itas/core/bytecode/Hero.java |   2 [32m+[m[31m-[m
+ .../src/test/java/org/itas/core/bytecode/Item.java |   2 [32m+[m[31m-[m
+ .../test/java/org/itas/core/bytecode/Model.java    |   2 [32m+[m[31m-[m
+ .../org/itas/core/util/DataContainersTest.java     |  16 [32m+[m[31m-[m
+ 34 files changed, 1082 insertions(+), 1488 deletions(-)
+
+[33mcommit 00c42b28fa9336e2b7de1e70cab1d1af61ae2479[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Wed Apr 22 18:12:03 2015 +0800
+
+    resource parser
+
+ core/src/main/java/org/itas/core/Ioc.java          |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Pool.java         |   4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/PoolImpl.java     |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Resource.java     |   1 [31m-[m
+ core/src/main/java/org/itas/core/Service.java      |   4 [32m+[m[31m-[m
+ .../java/org/itas/core/database/DBManager.java     |  52 [32m+[m[31m--[m
+ .../java/org/itas/core/database/DBPoolImpl.java    | 100 [32m+++[m[31m--[m
+ .../org/itas/core/database/SQLExecutorImpl.java    | 458 [32m++++++++++[m[31m----------[m
+ .../org/itas/core/database/SynerThreadImpl.java    | 121 [32m+++[m[31m---[m
+ .../java/org/itas/core/resources/AbstractXml.java  | 116 [32m+++[m[31m---[m
+ .../main/java/org/itas/core/resources/Element.java |  83 [32m+[m[31m---[m
+ .../java/org/itas/core/resources/ResPoolImpl.java  | 105 [32m+++++[m
+ .../org/itas/core/resources/ResourcePoolImpl.java  |  37 [31m--[m
+ .../main/java/org/itas/core/resources/XmlBean.java | 229 [32m++++++++++[m
+ .../java/org/itas/core/resources/XmlLoader.java    | 461 [32m++++[m[31m-----------------[m
+ .../java/org/itas/core/resources/XmlManager.java   |  79 [32m+++[m[31m-[m
+ core/src/main/java/org/itas/core/util/ItPaths.java |  64 [32m+++[m
+ core/src/main/resources/logback-test.xml           | 136 [32m+++[m[31m---[m
+ .../test/java/org/itas/core/resources/HeroRes.java |   5 [32m+[m
+ .../java/org/itas/core/resources/SkinConf.java     |   6 [32m+[m[31m-[m
+ .../itas/core/resources/TestResourcesParser.java   |  57 [32m++[m[31m-[m
+ 21 files changed, 1128 insertions(+), 994 deletions(-)
+
+[33mcommit 6ba53a2de5783df36eb288426bbf648d995b89fe[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Tue Apr 21 18:02:09 2015 +0800
+
+    xml parser
+
+ .../main/java/org/itas/core/AbstractDBSync.java    | 257 [31m---------[m
+ .../main/java/org/itas/core/AbstractHandler.java   | 101 [31m----[m
+ core/src/main/java/org/itas/core/AbstractXml.java  |  76 [31m---[m
+ core/src/main/java/org/itas/core/BindManager.java  |   5 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Binding.java      |  15 [31m-[m
+ core/src/main/java/org/itas/core/CacheAble.java    |   5 [31m-[m
+ core/src/main/java/org/itas/core/Config.java       |  15 [32m+[m
+ .../src/main/java/org/itas/core/ConfigHandler.java |  97 [31m----[m
+ .../main/java/org/itas/core/ConfigPoolImpl.java    | 132 [31m-----[m
+ core/src/main/java/org/itas/core/DBSync.java       |  67 [31m---[m
+ .../src/main/java/org/itas/core/DBSyncService.java |   9 [31m-[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java | 260 [31m---------[m
+ .../org/itas/core/FieldNotConfigException.java     |  22 [31m-[m
+ core/src/main/java/org/itas/core/GameBase.java     |  51 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/GameObject.java   |   5 [32m+[m[31m-[m
+ .../main/java/org/itas/core/GameObjectAotuID.java  |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/GameObjectNoCache.java |  30 [31m-[m
+ core/src/main/java/org/itas/core/HashId.java       |   2 [31m-[m
+ core/src/main/java/org/itas/core/Ioc.java          |   3 [32m+[m
+ core/src/main/java/org/itas/core/Parser.java       |  11 [32m+[m
+ core/src/main/java/org/itas/core/Pool.java         |   6 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/PoolImpl.java     | 360 [32m++++++++++++[m
+ core/src/main/java/org/itas/core/ResPoolImpl.java  | 174 [31m------[m
+ core/src/main/java/org/itas/core/Resource.java     |  49 [32m+[m[31m-[m
+ .../main/java/org/itas/core/ResourceHandler.java   |  64 [31m---[m
+ core/src/main/java/org/itas/core/SQLExecutor.java  |  54 [32m++[m
+ core/src/main/java/org/itas/core/ServerModule.java |  65 [32m+[m[31m--[m
+ core/src/main/java/org/itas/core/Service.java      |  26 [32m+[m
+ .../java/org/itas/core/ServiceInitialized.java     |  44 [31m--[m
+ core/src/main/java/org/itas/core/Simple.java       |  50 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Syner.java        | 332 [32m+++++++++++[m
+ core/src/main/java/org/itas/core/User.java         |   1 [31m-[m
+ core/src/main/java/org/itas/core/XmlHandler.java   |  16 [31m-[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |   6 [31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |  68 [32m+[m[31m--[m
+ .../itas/core/bytecode/FDContainerProvider.java    |   5 [31m-[m
+ .../core/bytecode/FDGameObjectNoCacheProvider.java |  60 [31m--[m
+ .../org/itas/core/bytecode/MDCloneProvider.java    |   4 [31m-[m
+ .../org/itas/core/bytecode/MDGetterProvider.java   |  44 [32m+[m[31m-[m
+ .../itas/core/bytecode/MDTotolSizeProvider.java    | 132 [32m++++[m[31m-[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |  18 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/cache/Cache.java  |  86 [32m+++[m
+ .../main/java/org/itas/core/cache/CacheAble.java   |  18 [32m+[m
+ .../main/java/org/itas/core/cache/CacheSizes.java  | 192 [32m+++++++[m
+ .../itas/core/cache/CalculateSizeException.java    |  13 [32m+[m
+ .../org/itas/core/cache/DataChangeAdapter.java     |  21 [32m+[m
+ .../org/itas/core/cache/DataChangeListener.java    |  13 [32m+[m
+ .../main/java/org/itas/core/cache/LinkedList.java  | 115 [32m++++[m
+ .../main/java/org/itas/core/cache/LocalCache.java  | 623 [32m+++++++++++++++++++++[m
+ .../java/org/itas/core/database/DBManager.java     |  77 [32m+++[m
+ .../java/org/itas/core/database/DBPoolImpl.java    | 132 [32m++[m[31m---[m
+ .../java/org/itas/core/database/DBSyncImpl.java    | 123 [31m----[m
+ .../org/itas/core/database/DBSyncServiceImpl.java  |  97 [31m----[m
+ .../java/org/itas/core/database/DBTemplete.java    | 192 [31m-------[m
+ .../org/itas/core/database/DataBaseManager.java    |  24 [31m-[m
+ .../java/org/itas/core/database/RowMapper.java     |  10 [31m-[m
+ .../org/itas/core/database/SQLExecutorImpl.java    | 356 [32m++++++++++++[m
+ .../org/itas/core/database/SynerThreadImpl.java    |  78 [32m+++[m
+ .../java/org/itas/core/resources/AbstractXml.java  |  94 [32m++++[m
+ .../java/org/itas/core/resources/Attribute.java    | 469 [32m++++++++++++++++[m
+ .../main/java/org/itas/core/resources/Element.java | 215 [32m+++++++[m
+ .../core/resources/FieldConfigFormatException.java |  34 [32m++[m
+ .../core/resources/FieldNotConfigException.java    |  34 [32m++[m
+ .../org/itas/core/resources/ResourcePoolImpl.java  |  37 [32m++[m
+ .../org/itas/core/resources/XmlHandlerImpl.java    |  95 [32m++++[m
+ .../java/org/itas/core/resources/XmlLoader.java    | 425 [32m++++++++++++++[m
+ .../java/org/itas/core/resources/XmlManager.java   |  39 [32m++[m
+ .../java/org/itas/core/resources/XmlParser.java    |  21 [32m+[m
+ .../main/java/org/itas/core/util/AutoClose.java    |  16 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/Constructors.java |  24 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/util/Enums.java   | 130 [32m++[m[31m---[m
+ .../java/org/itas/core/util/XmlContainers.java     | 300 [31m----------[m
+ core/src/main/resources/application.conf           |   5 [31m-[m
+ .../core/bytecode/FDDoubleArrayProviderTest.java   |   4 [32m+[m[31m-[m
+ .../bytecode/FDGameObjectNoCacheProviderTest.java  |  92 [32m+[m[31m--[m
+ .../core/bytecode/FDSingleArrayProviderTest.java   |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/FieldTest.java     |   2 [32m+[m[31m-[m
+ .../test/java/org/itas/core/bytecode/HeroRes.java  |   7 [31m-[m
+ .../src/test/java/org/itas/core/bytecode/Item.java |   4 [32m+[m[31m-[m
+ .../core/bytecode/MDTotolSizeProviderTest.java     |  40 [32m++[m
+ .../test/java/org/itas/core/resources/HeroRes.java |  50 [32m++[m
+ .../java/org/itas/core/resources/SkinConf.java     |  50 [32m++[m
+ .../itas/core/resources/TestResourcesParser.java   |  62 [32m++[m
+ core/src/test/resources/HeroRes.xml                |  14 [32m+[m
+ core/src/test/resources/Main.xml                   |  33 [32m++[m
+ core/src/test/resources/SkinConf.xml               |  13 [32m+[m
+ 86 files changed, 4587 insertions(+), 2637 deletions(-)
+
+[33mcommit 32e438bf8f38a6352fc48268b49fcf16841de907[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Apr 2 15:40:52 2015 +0800
+
+    modify database method provider
+
+ .../itas/core/bytecode/AbstractMethodProvider.java |  24 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/MDCloneProvider.java    |   5 [31m-[m
+ .../org/itas/core/bytecode/MDDoAlterProvider.java  |  65 [32m+++++[m
+ .../org/itas/core/bytecode/MDDoCreateProvider.java |  92 [32m++++++[m
+ .../org/itas/core/bytecode/MDDoDeleteProvider.java |  61 [32m++++[m
+ .../org/itas/core/bytecode/MDDoFillProvider.java   |  59 [32m++++[m
+ .../org/itas/core/bytecode/MDDoInsertProvider.java |  66 [32m+++++[m
+ .../org/itas/core/bytecode/MDDoSelectProvider.java |  72 [32m+++++[m
+ .../org/itas/core/bytecode/MDDoUpdateProvider.java |  84 [32m++++++[m
+ .../org/itas/core/bytecode/MDGetterProvider.java   |  80 [32m++++++[m
+ .../itas/core/bytecode/MDInsertSQLProvider.java    |   3 [32m+[m
+ .../itas/core/bytecode/MDSelectSQLProvider.java    |  54 [32m++++[m
+ .../org/itas/core/bytecode/MDSetterProvider.java   |  99 [32m+++++++[m
+ .../itas/core/bytecode/MDTableNameProvider.java    |   1 [31m-[m
+ .../itas/core/bytecode/MDTotolSizeProvider.java    |  67 [32m+++++[m
+ .../itas/core/bytecode/MDUpdateSQLProvider.java    |  14 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoAlterProvider.java  |  84 [31m------[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java |  85 [31m------[m
+ .../itas/core/bytecode/MethodDoDeleteProvider.java |  71 [31m-----[m
+ .../itas/core/bytecode/MethodDoFillProvider.java   |  65 [31m-----[m
+ .../itas/core/bytecode/MethodDoInsertProvider.java |  69 [31m-----[m
+ .../itas/core/bytecode/MethodDoSelectProvider.java |  86 [31m------[m
+ .../itas/core/bytecode/MethodDoUpdateProvider.java |  88 [31m------[m
+ .../org/itas/core/bytecode/MethodProvider.java     |   8 [32m+[m[31m-[m
+ .../bytecode/MethodSetMethodModifyProvider.java    | 103 [31m-------[m
+ .../java/org/itas/core/bytecode/Processor.java     |  13 [31m-[m
+ .../org/itas/core/bytecode/SelectSQLProvider.java  |  50 [31m----[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |   6 [32m+[m
+ .../java/org/itas/core/util/DataContainers.java    |  14 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/util/Next.java    |   8 [32m+[m[31m-[m
+ core/src/test/java/org/itas/core/TestAll.java      |  14 [32m+[m[31m-[m
+ .../core/bytecode/AbstreactMethodProvider.java     |  23 [32m++[m
+ .../itas/core/bytecode/BooleanProviderTest.java    |  39 [31m---[m
+ .../java/org/itas/core/bytecode/ByteCodeTest.java  |  39 [31m---[m
+ .../org/itas/core/bytecode/ByteProviderTest.java   |  39 [31m---[m
+ .../org/itas/core/bytecode/CharProviderTest.java   |  39 [31m---[m
+ .../core/bytecode/DoubleArrayProviderTest.java     | 215 [31m--------------[m
+ .../org/itas/core/bytecode/DoubleProviderTest.java |  39 [31m---[m
+ .../itas/core/bytecode/EnumByteProviderTest.java   |  42 [31m---[m
+ .../itas/core/bytecode/EnumIntProviderTest.java    |  42 [31m---[m
+ .../org/itas/core/bytecode/EnumProviderTest.java   |  56 [31m----[m
+ .../itas/core/bytecode/EnumStringProviderTest.java |  42 [31m---[m
+ .../itas/core/bytecode/FDBooleanProviderTest.java  |  39 [32m+++[m
+ .../org/itas/core/bytecode/FDByteProviderTest.java |  39 [32m+++[m
+ .../org/itas/core/bytecode/FDCharProviderTest.java |  39 [32m+++[m
+ .../core/bytecode/FDDoubleArrayProviderTest.java   | 215 [32m++++++++++++++[m
+ .../itas/core/bytecode/FDDoubleProviderTest.java   |  39 [32m+++[m
+ .../itas/core/bytecode/FDEnumByteProviderTest.java |  42 [32m+++[m
+ .../itas/core/bytecode/FDEnumIntProviderTest.java  |  42 [32m+++[m
+ .../org/itas/core/bytecode/FDEnumProviderTest.java |  56 [32m++++[m
+ .../core/bytecode/FDEnumStringProviderTest.java    |  42 [32m+++[m
+ .../itas/core/bytecode/FDFloatProviderTest.java    |  39 [32m+++[m
+ .../bytecode/FDGameObjectAutoIdProviderTest.java   |  36 [32m+++[m
+ .../bytecode/FDGameObjectNoCacheProviderTest.java  |  46 [32m+++[m
+ .../core/bytecode/FDGameObjectProviderTest.java    |  36 [32m+++[m
+ .../org/itas/core/bytecode/FDIntProviderTest.java  |  39 [32m+++[m
+ .../org/itas/core/bytecode/FDListProviderTest.java | 313 [32m+++++++++++++++++++++[m
+ .../org/itas/core/bytecode/FDLongProviderTest.java |  36 [32m+++[m
+ .../org/itas/core/bytecode/FDMapProviderTest.java  | 163 [32m+++++++++++[m
+ .../itas/core/bytecode/FDResourceProviderTest.java |  46 [32m+++[m
+ .../org/itas/core/bytecode/FDSetProviderTest.java  | 307 [32m++++++++++++++++++++[m
+ .../itas/core/bytecode/FDShortProviderTest.java    |  39 [32m+++[m
+ .../itas/core/bytecode/FDSimpleProviderTest.java   |  48 [32m++++[m
+ .../core/bytecode/FDSingleArrayProviderTest.java   | 204 [32m++++++++++++++[m
+ .../itas/core/bytecode/FDStringProviderTest.java   |  39 [32m+++[m
+ .../core/bytecode/FDTimestampProviderTest.java     |  88 [32m++++++[m
+ .../java/org/itas/core/bytecode/FieldTest.java     |  39 [32m+++[m
+ .../org/itas/core/bytecode/FloatProviderTest.java  |  39 [31m---[m
+ .../bytecode/GameObjectAutoIdProviderTest.java     |  36 [31m---[m
+ .../bytecode/GameObjectNoCacheProviderTest.java    |  46 [31m---[m
+ .../itas/core/bytecode/GameObjectProviderTest.java |  36 [31m---[m
+ .../org/itas/core/bytecode/IntProviderTest.java    |  39 [31m---[m
+ .../src/test/java/org/itas/core/bytecode/Item.java |  36 [32m++[m[31m-[m
+ .../org/itas/core/bytecode/ListProviderTest.java   | 313 [31m---------------------[m
+ .../org/itas/core/bytecode/LongProviderTest.java   |  36 [31m---[m
+ .../itas/core/bytecode/MDCloneProviderTest.java    |  32 [32m+++[m
+ .../core/bytecode/MDDeleteSQLProviderTest.java     |  31 [32m++[m
+ .../itas/core/bytecode/MDDoAlterProviderTest.java  |  58 [32m++++[m
+ .../itas/core/bytecode/MDDoCreateProviderTest.java |  50 [32m++++[m
+ .../itas/core/bytecode/MDDoDeleteProviderTest.java |  45 [32m+++[m
+ .../itas/core/bytecode/MDDoFillProviderTest.java   |  49 [32m++++[m
+ .../itas/core/bytecode/MDDoInsertProviderTest.java |  50 [32m++++[m
+ .../itas/core/bytecode/MDDoSelectProviderTest.java |  45 [32m+++[m
+ .../itas/core/bytecode/MDDoUpdateProviderTest.java |  50 [32m++++[m
+ .../core/bytecode/MDInsertSQLProviderTest.java     |  43 [32m+++[m
+ .../core/bytecode/MDSelectSQLProviderTest.java     |  43 [32m+++[m
+ .../core/bytecode/MDTableNameProviderTest.java     |  34 [32m+++[m
+ .../core/bytecode/MDUpdateSQLProviderTest.java     |  43 [32m+++[m
+ .../org/itas/core/bytecode/MapProviderTest.java    | 163 [31m-----------[m
+ .../java/org/itas/core/bytecode/MethodTest.java    |  26 [32m++[m
+ .../itas/core/bytecode/ResourceProviderTest.java   |  46 [31m---[m
+ .../org/itas/core/bytecode/SetProviderTest.java    | 307 [31m--------------------[m
+ .../org/itas/core/bytecode/ShortProviderTest.java  |  39 [31m---[m
+ .../org/itas/core/bytecode/SimpleProviderTest.java |  48 [31m----[m
+ .../core/bytecode/SingleArrayProviderTest.java     | 204 [31m--------------[m
+ .../org/itas/core/bytecode/StringProviderTest.java |  39 [31m---[m
+ .../core/bytecode/TestMethodColneProvider.java     |  37 [31m---[m
+ .../itas/core/bytecode/TimestampProviderTest.java  |  88 [31m------[m
+ 98 files changed, 3576 insertions(+), 2871 deletions(-)
+
+[33mcommit 611b2df0f49f03bc2cee59c8a5bb5b3d01b6912b[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Wed Apr 1 16:51:55 2015 +0800
+
+    supporte array|doublearray finish
+
+ .../main/java/org/itas/core/AbstractDBSync.java    |  20 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/CacheAble.java    |   5 [32m+[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java |  47 [32m++[m[31m---[m
+ core/src/main/java/org/itas/core/GameBase.java     | 207 [32m++++++++++++++++++++[m
+ core/src/main/java/org/itas/core/GameObject.java   | 210 [32m+[m[31m-------------------[m
+ .../main/java/org/itas/core/GameObjectAotuID.java  |  34 [32m+++[m[31m-[m
+ .../main/java/org/itas/core/GameObjectNoCache.java |  30 [32m+++[m
+ core/src/main/java/org/itas/core/HashId.java       |   2 [32m+[m
+ core/src/main/java/org/itas/core/Pool.java         | 120 [32m++++++[m[31m------[m
+ core/src/main/java/org/itas/core/Simple.java       |  63 [32m+++[m[31m---[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |   6 [32m+[m
+ .../itas/core/bytecode/AbstractMethodProvider.java | 182 [32m+++++++++[m[31m--------[m
+ .../java/org/itas/core/bytecode/ArrayProvider.java |  51 [31m-----[m
+ .../org/itas/core/bytecode/BooleanProvider.java    |  61 [31m------[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |   4 [31m-[m
+ .../java/org/itas/core/bytecode/ByteProvider.java  |  51 [31m-----[m
+ .../java/org/itas/core/bytecode/CharProvider.java  |  53 [31m-----[m
+ .../java/org/itas/core/bytecode/CloneProvider.java |  66 [31m-------[m
+ .../org/itas/core/bytecode/ContainerProvider.java  | 146 [31m--------------[m
+ .../org/itas/core/bytecode/DoubleProvider.java     |  51 [31m-----[m
+ .../org/itas/core/bytecode/EnumByteProvider.java   |  61 [31m------[m
+ .../org/itas/core/bytecode/EnumIntProvider.java    |  62 [31m------[m
+ .../java/org/itas/core/bytecode/EnumProvider.java  |  62 [31m------[m
+ .../org/itas/core/bytecode/EnumStringProvider.java |  62 [31m------[m
+ .../org/itas/core/bytecode/FDBooleanProvider.java  |  61 [32m++++++[m
+ .../org/itas/core/bytecode/FDByteProvider.java     |  51 [32m+++++[m
+ .../org/itas/core/bytecode/FDCharProvider.java     |  53 [32m+++++[m
+ .../itas/core/bytecode/FDContainerProvider.java    | 149 [32m++++++++++++++[m
+ .../itas/core/bytecode/FDDoubleArrayProvider.java  | 100 [32m++++++++++[m
+ .../org/itas/core/bytecode/FDDoubleProvider.java   |  51 [32m+++++[m
+ .../org/itas/core/bytecode/FDEnumByteProvider.java |  61 [32m++++++[m
+ .../org/itas/core/bytecode/FDEnumIntProvider.java  |  62 [32m++++++[m
+ .../org/itas/core/bytecode/FDEnumProvider.java     |  62 [32m++++++[m
+ .../itas/core/bytecode/FDEnumStringProvider.java   |  62 [32m++++++[m
+ .../org/itas/core/bytecode/FDFloatProvider.java    |  52 [32m+++++[m
+ .../core/bytecode/FDGameObjectAutoProvider.java    |  41 [32m++++[m
+ .../core/bytecode/FDGameObjectNoCacheProvider.java |  60 [32m++++++[m
+ .../itas/core/bytecode/FDGameObjectProvider.java   |  41 [32m++++[m
+ .../java/org/itas/core/bytecode/FDIntProvider.java |  52 [32m+++++[m
+ .../org/itas/core/bytecode/FDListProvider.java     |  71 [32m+++++++[m
+ .../org/itas/core/bytecode/FDLongProvider.java     |  53 [32m+++++[m
+ .../java/org/itas/core/bytecode/FDMapProvider.java |  74 [32m+++++++[m
+ .../org/itas/core/bytecode/FDResourceProvider.java |  67 [32m+++++++[m
+ .../java/org/itas/core/bytecode/FDSetProvider.java |  70 [32m+++++++[m
+ .../org/itas/core/bytecode/FDShortProvider.java    |  52 [32m+++++[m
+ .../org/itas/core/bytecode/FDSimpleProvider.java   |  66 [32m+++++++[m
+ .../itas/core/bytecode/FDSingleArrayProvider.java  |  85 [32m++++++++[m
+ .../org/itas/core/bytecode/FDStringProvider.java   |  56 [32m++++++[m
+ .../itas/core/bytecode/FDTimestampProvider.java    |  54 [32m++++++[m
+ .../java/org/itas/core/bytecode/FloatProvider.java |  52 [31m-----[m
+ .../itas/core/bytecode/GameObjectAutoProvider.java |  39 [31m----[m
+ .../org/itas/core/bytecode/GameObjectProvider.java |  39 [31m----[m
+ .../java/org/itas/core/bytecode/IntProvider.java   |  52 [31m-----[m
+ .../java/org/itas/core/bytecode/ListProvider.java  |  71 [31m-------[m
+ .../java/org/itas/core/bytecode/LongProvider.java  |  53 [31m-----[m
+ .../org/itas/core/bytecode/MDCloneProvider.java    |  66 [32m+++++++[m
+ .../itas/core/bytecode/MDDeleteSQLProvider.java    |  38 [32m++++[m
+ .../itas/core/bytecode/MDInsertSQLProvider.java    |  59 [32m++++++[m
+ .../itas/core/bytecode/MDTableNameProvider.java    |  26 [32m+++[m
+ .../itas/core/bytecode/MDUpdateSQLProvider.java    |  49 [32m+++++[m
+ .../java/org/itas/core/bytecode/MapProvider.java   |  74 [31m-------[m
+ .../org/itas/core/bytecode/MethodProvider.java     |  21 [32m+[m[31m-[m
+ .../core/bytecode/MethodSQLDeleteProvider.java     |  49 [31m-----[m
+ .../core/bytecode/MethodSQLInsertProvider.java     |  67 [31m-------[m
+ .../core/bytecode/MethodSQLSelectProvider.java     |  56 [31m------[m
+ .../core/bytecode/MethodSQLUpdateProvider.java     |  61 [31m------[m
+ .../core/bytecode/MethodTableNameProvider.java     |  32 [31m---[m
+ .../org/itas/core/bytecode/ResourceProvider.java   |  67 [31m-------[m
+ .../org/itas/core/bytecode/SelectSQLProvider.java  |  50 [32m+++++[m
+ .../java/org/itas/core/bytecode/SetProvider.java   |  70 [31m-------[m
+ .../java/org/itas/core/bytecode/ShortProvider.java |  52 [31m-----[m
+ .../org/itas/core/bytecode/SimpleProvider.java     |  66 [31m-------[m
+ .../org/itas/core/bytecode/StringProvider.java     |  56 [31m------[m
+ .../org/itas/core/bytecode/TimestampProvider.java  |  54 [31m------[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |  90 [32m++++[m[31m-----[m
+ .../java/org/itas/core/database/DBSyncImpl.java    |   6 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/util/DataBase.java |  12 [32m+[m[31m-[m
+ .../java/org/itas/core/util/UUIDGenerator.java     |  97 [32m++++++++++[m
+ .../main/java/org/itas/core/util/UUIDUtils.java    |  25 [31m---[m
+ core/src/test/java/org/itas/core/TestAll.java      |  42 [32m+[m[31m---[m
+ .../itas/core/bytecode/AbstreactFieldProvider.java |  13 [32m++[m
+ .../itas/core/bytecode/BooleanProviderTest.java    |  54 [32m+[m[31m-----[m
+ .../java/org/itas/core/bytecode/ByteCodeTest.java  |  39 [32m++++[m
+ .../org/itas/core/bytecode/ByteProviderTest.java   |  54 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/CharProviderTest.java   |  54 [32m+[m[31m-----[m
+ .../core/bytecode/DoubleArrayProviderTest.java     | 215 [32m+++++++++++++++++++++[m
+ .../org/itas/core/bytecode/DoubleProviderTest.java |  54 [32m+[m[31m-----[m
+ .../itas/core/bytecode/EnumByteProviderTest.java   |  57 [32m+[m[31m-----[m
+ .../itas/core/bytecode/EnumIntProviderTest.java    |  56 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/EnumProviderTest.java   |  62 [32m++[m[31m----[m
+ .../itas/core/bytecode/EnumStringProviderTest.java |  56 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/FloatProviderTest.java  |  54 [32m+[m[31m-----[m
+ .../bytecode/GameObjectAutoIdProviderTest.java     |  36 [32m++++[m
+ .../bytecode/GameObjectNoCacheProviderTest.java    |  46 [32m+++++[m
+ .../itas/core/bytecode/GameObjectProviderTest.java |  36 [32m++++[m
+ .../src/test/java/org/itas/core/bytecode/Hero.java | 105 [32m+++++++++[m[31m-[m
+ .../test/java/org/itas/core/bytecode/HeroRes.java  |   7 [32m+[m
+ .../org/itas/core/bytecode/IntProviderTest.java    |  54 [32m+[m[31m-----[m
+ .../src/test/java/org/itas/core/bytecode/Item.java |  21 [32m++[m
+ .../org/itas/core/bytecode/ListProviderTest.java   |  73 [32m++[m[31m-----[m
+ .../org/itas/core/bytecode/LongProviderTest.java   |  55 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/MapProviderTest.java    |  64 [32m++[m[31m----[m
+ .../test/java/org/itas/core/bytecode/Model.java    |  24 [32m++[m[31m-[m
+ .../itas/core/bytecode/ResourceProviderTest.java   |  55 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/SetProviderTest.java    |  66 [32m++[m[31m-----[m
+ .../org/itas/core/bytecode/ShortProviderTest.java  |  54 [32m+[m[31m-----[m
+ .../org/itas/core/bytecode/SimpleProviderTest.java |  55 [32m+[m[31m-----[m
+ .../core/bytecode/SingleArrayProviderTest.java     | 204 [32m+++++++++++++++++++[m
+ .../org/itas/core/bytecode/StringProviderTest.java |  54 [32m+[m[31m-----[m
+ .../itas/core/bytecode/TimestampProviderTest.java  |   2 [32m+[m[31m-[m
+ .../org/itas/core/util/DataContainersTest.java     |   1 [31m-[m
+ 111 files changed, 3377 insertions(+), 3256 deletions(-)
+
+[33mcommit 71e9a81a6823ce8b0bd31ebf42334974059d4aaa[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Fri Mar 27 17:20:23 2015 +0800
+
+    add bytecode all test
+
+ core/src/main/java/org/itas/core/AbstractXml.java  |  88 [32m+++[m[31m---[m
+ .../java/org/itas/core/bytecode/ArrayProvider.java |  51 [32m+++[m
+ .../org/itas/core/bytecode/ContainerProvider.java  |  83 [32m++++[m[31m-[m
+ .../java/org/itas/core/bytecode/ListProvider.java  |  87 [32m++[m[31m---[m
+ .../java/org/itas/core/bytecode/MapProvider.java   |  91 [32m++[m[31m----[m
+ .../java/org/itas/core/bytecode/SetProvider.java   |  78 [32m++[m[31m---[m
+ core/src/main/java/org/itas/core/util/Enums.java   |  55 [32m+[m[31m---[m
+ .../java/org/itas/core/util/XmlContainers.java     | 352 [32m+++++++++++[m[31m----------[m
+ core/src/test/java/org/itas/core/TestAll.java      |  45 [32m+[m[31m--[m
+ .../src/test/java/org/itas/core/bytecode/Hero.java |  76 [32m+++++[m
+ .../test/java/org/itas/core/bytecode/HeroRes.java  |  11 [32m+[m
+ .../org/itas/core/bytecode/ListProviderTest.java   | 346 [32m++++++++++++++++++++[m
+ .../org/itas/core/bytecode/MapProviderTest.java    | 203 [32m++++++++++++[m
+ .../test/java/org/itas/core/bytecode/Model.java    | 117 [32m+++++++[m
+ .../itas/core/bytecode/ResourceProviderTest.java   |  99 [32m++++++[m
+ .../org/itas/core/bytecode/SetProviderTest.java    | 349 [32m++++++++++++++++++++[m
+ .../java/org/itas/core/bytecode/TestByteCodes.java |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  28 [31m--[m
+ .../itas/core/bytecode/TestFieldListProvider.java  | 175 [31m----------[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   | 192 [31m-----------[m
+ .../core/bytecode/TestFieldResourcesProvider.java  |  58 [31m----[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   | 174 [31m----------[m
+ .../java/org/itas/core/bytecode/TestMethod.java    |  38 [31m---[m
+ .../core/bytecode/TestMethodColneProvider.java     |  74 [32m++[m[31m---[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  | 334 [32m++++++++++[m[31m---------[m
+ .../TestMethodStatementDeleteProvider.java         |   5 [31m-[m
+ .../itas/core/bytecode/TimestampProviderTest.java  |   3 [31m-[m
+ .../java/org/itas/core/util/FirstCharTest.java     |  28 [32m++[m
+ 28 files changed, 1891 insertions(+), 1351 deletions(-)
+
+[33mcommit 62039a0dfdf6b5db6bf9731c2b185147a62398af[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 26 18:09:29 2015 +0800
+
+    string + link to stringbuffer
+
+ .../itas/core/bytecode/AbstractFieldProvider.java  |  19 [32m++[m
+ .../org/itas/core/bytecode/BooleanProvider.java    |  12 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteProvider.java  |  32 [32m++[m[31m--[m
+ .../java/org/itas/core/bytecode/CharProvider.java  |  15 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/DoubleProvider.java     |  12 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/EnumByteProvider.java   |  53 [32m+++[m[31m---[m
+ .../org/itas/core/bytecode/EnumIntProvider.java    |  53 [32m+++[m[31m---[m
+ .../java/org/itas/core/bytecode/EnumProvider.java  |  62 [32m+++++++[m
+ .../org/itas/core/bytecode/EnumStringProvider.java |  53 [32m+++[m[31m---[m
+ .../java/org/itas/core/bytecode/FloatProvider.java |  12 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/IntProvider.java   |  12 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/LongProvider.java  |  13 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/ResourceProvider.java   |  45 [32m+++[m[31m--[m
+ .../java/org/itas/core/bytecode/ShortProvider.java |  14 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/SimpleProvider.java     |  45 [32m+++[m[31m--[m
+ .../org/itas/core/bytecode/StringProvider.java     |  12 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/TimestampProvider.java  |  14 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |   8 [32m+[m
+ core/src/main/java/org/itas/core/util/Enums.java   | 166 [32m++++++++[m[31m---------[m
+ core/src/main/java/org/itas/core/util/Next.java    |  41 [32m+++++[m
+ core/src/test/java/org/itas/core/TestAll.java      |  22 [32m++[m[31m-[m
+ .../itas/core/bytecode/AbstreactFieldProvider.java |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/BooleanProviderTest.java    |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/ByteProviderTest.java   |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/CharProviderTest.java   |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/DoubleProviderTest.java |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/EnumByteProviderTest.java   |  97 [32m++++++++++[m
+ .../itas/core/bytecode/EnumIntProviderTest.java    |  96 [32m++++++++++[m
+ .../org/itas/core/bytecode/EnumProviderTest.java   |  96 [32m++++++++++[m
+ .../itas/core/bytecode/EnumStringProviderTest.java |  96 [32m++++++++++[m
+ .../org/itas/core/bytecode/FloatProviderTest.java  |   7 [32m+[m[31m-[m
+ .../src/test/java/org/itas/core/bytecode/Hero.java |  16 [32m++[m
+ .../org/itas/core/bytecode/IntProviderTest.java    |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/LongProviderTest.java   |   9 [32m+[m[31m-[m
+ .../test/java/org/itas/core/bytecode/Model.java    | 197 [32m+++++++++++++++++++++[m
+ .../java/org/itas/core/bytecode/ModelTest.java     | 106 [31m-----------[m
+ .../org/itas/core/bytecode/ShortProviderTest.java  |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/SimpleProviderTest.java | 101 [32m+++++++++++[m
+ .../org/itas/core/bytecode/StringProviderTest.java |   7 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |  52 [31m------[m
+ .../core/bytecode/TestFieldEnumIntProvider.java    |  56 [31m------[m
+ .../core/bytecode/TestFieldEnumStringProvider.java |  51 [31m------[m
+ .../core/bytecode/TestFieldSimpleProvider.java     |  62 [31m-------[m
+ .../itas/core/bytecode/TestFieldTimestampCode.java |  37 [31m----[m
+ .../itas/core/bytecode/TimestampProviderTest.java  |  91 [32m++++++++++[m
+ .../test/java/org/itas/core/util/EnumsTest.java    |   5 [32m+[m
+ 46 files changed, 1243 insertions(+), 709 deletions(-)
+
+[33mcommit 8be3acd24e2d6ef0afb7f113b80ceb1378e3f13a[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Wed Mar 25 18:09:23 2015 +0800
+
+    mem code
+
+ .gitignore                                         |   6 [32m+[m[31m-[m
+ build.gradle                                       |  28 [32m+[m[31m-[m
+ core/build.gradle                                  |   6 [32m+[m[31m-[m
+ .../main/java/org/itas/core/AbstractDBSync.java    |  76 [32m++[m[31m--[m
+ .../main/java/org/itas/core/AbstractHandler.java   |  71 [32m++[m[31m--[m
+ core/src/main/java/org/itas/core/AbstractXml.java  |  34 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/BindManager.java  | 432 [32m++++++++++[m[31m-----------[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java | 254 [32m++++++[m[31m------[m
+ core/src/main/java/org/itas/core/Dispatch.java     |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/GameObject.java   |   4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/ResPoolImpl.java  | 173 [32m+++++[m[31m----[m
+ .../java/org/itas/core/UnsupportException.java     |  22 [32m++[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  | 148 [32m++++++[m[31m-[m
+ .../itas/core/bytecode/AbstractMethodProvider.java | 169 [32m++++[m[31m----[m
+ .../itas/core/bytecode/AbstractTypeProvider.java   | 162 [31m--------[m
+ .../org/itas/core/bytecode/BooleanProvider.java    |  61 [32m+++[m
+ .../org/itas/core/bytecode/ByteCodeMethods.java    | 126 [32m+++[m[31m---[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |  83 [32m++[m[31m--[m
+ .../java/org/itas/core/bytecode/ByteProvider.java  |  51 [32m+++[m
+ .../java/org/itas/core/bytecode/CharProvider.java  |  52 [32m+++[m
+ .../java/org/itas/core/bytecode/CloneProvider.java |  66 [32m++++[m
+ .../org/itas/core/bytecode/ContainerProvider.java  |  83 [32m++++[m
+ .../org/itas/core/bytecode/DoubleProvider.java     |  51 [32m+++[m
+ .../org/itas/core/bytecode/EnumByteProvider.java   |  62 [32m+++[m
+ .../org/itas/core/bytecode/EnumIntProvider.java    |  63 [32m+++[m
+ .../org/itas/core/bytecode/EnumStringProvider.java |  63 [32m+++[m
+ .../itas/core/bytecode/FieldBooleanProvider.java   |  34 [31m--[m
+ .../org/itas/core/bytecode/FieldByteProvider.java  |  33 [31m--[m
+ .../org/itas/core/bytecode/FieldCharProvider.java  |  33 [31m--[m
+ .../itas/core/bytecode/FieldContainerProvider.java |  83 [31m----[m
+ .../itas/core/bytecode/FieldDoubleProvider.java    |  33 [31m--[m
+ .../itas/core/bytecode/FieldEnumByteProvider.java  |  44 [31m---[m
+ .../itas/core/bytecode/FieldEnumIntProvider.java   |  45 [31m---[m
+ .../core/bytecode/FieldEnumStringProvider.java     |  45 [31m---[m
+ .../org/itas/core/bytecode/FieldFloatProvider.java |  34 [31m--[m
+ .../org/itas/core/bytecode/FieldIntProvider.java   |  34 [31m--[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |  88 [31m-----[m
+ .../org/itas/core/bytecode/FieldLongProvider.java  |  34 [31m--[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   | 100 [31m-----[m
+ .../java/org/itas/core/bytecode/FieldProvider.java |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldResourcesProvider.java |  51 [31m---[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |  88 [31m-----[m
+ .../org/itas/core/bytecode/FieldShortProvider.java |  34 [31m--[m
+ .../itas/core/bytecode/FieldSimpleProvider.java    |  51 [31m---[m
+ .../itas/core/bytecode/FieldStringProvider.java    |  34 [31m--[m
+ .../itas/core/bytecode/FieldTimestampProvider.java |  34 [31m--[m
+ .../java/org/itas/core/bytecode/FloatProvider.java |  52 [32m+++[m
+ .../itas/core/bytecode/GameObjectAutoProvider.java |  39 [32m++[m
+ .../org/itas/core/bytecode/GameObjectProvider.java |  39 [32m++[m
+ .../java/org/itas/core/bytecode/IntProvider.java   |  52 [32m+++[m
+ .../java/org/itas/core/bytecode/ListProvider.java  | 106 [32m+++++[m
+ .../java/org/itas/core/bytecode/LongProvider.java  |  52 [32m+++[m
+ .../java/org/itas/core/bytecode/MapProvider.java   | 115 [32m++++++[m
+ .../itas/core/bytecode/MethodCloneProvider.java    |  66 [31m----[m
+ .../itas/core/bytecode/MethodDoAlterProvider.java  | 168 [32m++++[m[31m----[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java | 170 [32m++++[m[31m----[m
+ .../itas/core/bytecode/MethodDoDeleteProvider.java | 142 [32m+++[m[31m----[m
+ .../itas/core/bytecode/MethodDoFillProvider.java   | 130 [32m+++[m[31m----[m
+ .../itas/core/bytecode/MethodDoInsertProvider.java | 138 [32m+++[m[31m----[m
+ .../itas/core/bytecode/MethodDoSelectProvider.java | 172 [32m++++[m[31m----[m
+ .../itas/core/bytecode/MethodDoUpdateProvider.java | 176 [32m++++[m[31m-----[m
+ .../core/bytecode/MethodSQLDeleteProvider.java     |  98 [32m++[m[31m---[m
+ .../core/bytecode/MethodSQLInsertProvider.java     | 134 [32m+++[m[31m----[m
+ .../core/bytecode/MethodSQLSelectProvider.java     | 112 [32m+++[m[31m---[m
+ .../core/bytecode/MethodSQLUpdateProvider.java     | 122 [32m+++[m[31m---[m
+ .../bytecode/MethodSetMethodModifyProvider.java    | 206 [32m+++++[m[31m-----[m
+ .../core/bytecode/MethodTableNameProvider.java     |  63 [32m+[m[31m--[m
+ .../java/org/itas/core/bytecode/Processor.java     |  13 [32m+[m
+ .../org/itas/core/bytecode/ResourceProvider.java   |  70 [32m++++[m
+ .../java/org/itas/core/bytecode/SetProvider.java   | 104 [32m+++++[m
+ .../java/org/itas/core/bytecode/ShortProvider.java |  52 [32m+++[m
+ .../org/itas/core/bytecode/SimpleProvider.java     |  69 [32m++++[m
+ .../org/itas/core/bytecode/StringProvider.java     |  56 [32m+++[m
+ .../org/itas/core/bytecode/TimestampProvider.java  |  52 [32m+++[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |  71 [32m++[m[31m--[m
+ .../itas/core/bytecode/TypeBooleanProvider.java    |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeByteProvider.java   |  31 [31m--[m
+ .../org/itas/core/bytecode/TypeCharProvider.java   |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeDoubleProvider.java |  29 [31m--[m
+ .../itas/core/bytecode/TypeEnumByteProvider.java   |  29 [31m--[m
+ .../itas/core/bytecode/TypeEnumIntProvider.java    |  29 [31m--[m
+ .../itas/core/bytecode/TypeEnumStringProvider.java |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeFloatProvider.java  |  29 [31m--[m
+ .../bytecode/TypeGameObjectAutoIdProvider.java     |  37 [31m--[m
+ .../itas/core/bytecode/TypeGameObjectProvider.java |  37 [31m--[m
+ .../org/itas/core/bytecode/TypeIntProvider.java    |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeListProvider.java   |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeLongProvider.java   |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeMapProvider.java    |  29 [31m--[m
+ .../java/org/itas/core/bytecode/TypeProvider.java  |  14 [32m+[m[31m-[m
+ .../itas/core/bytecode/TypeResourceProvider.java   |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeSetProvider.java    |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeShortProvider.java  |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeSimpleProvider.java |  29 [31m--[m
+ .../org/itas/core/bytecode/TypeStringProvider.java |  33 [31m--[m
+ .../itas/core/bytecode/TypeTimestampProvider.java  |  29 [31m--[m
+ .../java/org/itas/core/database/DBSyncImpl.java    |   6 [32m+[m[31m-[m
+ .../org/itas/core/database/DBSyncServiceImpl.java  |   2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/net/GameWorld.java |  18 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/net/IoUtil.java   |   8 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/ClassLoaders.java |  10 [32m+[m[31m-[m
+ .../java/org/itas/core/util/DataContainers.java    |  10 [32m+[m[31m-[m
+ .../java/org/itas/core/util/XmlContainers.java     |  26 [32m+[m[31m-[m
+ core/src/test/java/org/itas/core/TestAll.java      |  85 [32m++[m[31m--[m
+ .../itas/core/bytecode/AbstreactFieldProvider.java |  20 [32m+[m
+ .../itas/core/bytecode/BooleanProviderTest.java    |  94 [32m+++++[m
+ .../org/itas/core/bytecode/ByteProviderTest.java   |  94 [32m+++++[m
+ .../org/itas/core/bytecode/CharProviderTest.java   |  94 [32m+++++[m
+ .../org/itas/core/bytecode/DoubleProviderTest.java |  94 [32m+++++[m
+ .../org/itas/core/bytecode/FloatProviderTest.java  |  94 [32m+++++[m
+ .../org/itas/core/bytecode/IntProviderTest.java    |  94 [32m+++++[m
+ .../org/itas/core/bytecode/LongProviderTest.java   |  94 [32m+++++[m
+ .../java/org/itas/core/bytecode/ModelTest.java     | 106 [32m+++++[m
+ .../org/itas/core/bytecode/ShortProviderTest.java  |  94 [32m+++++[m
+ .../org/itas/core/bytecode/StringProviderTest.java |  94 [32m+++++[m
+ .../java/org/itas/core/bytecode/TestByteCodes.java |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  62 [32m+[m[31m--[m
+ .../core/bytecode/TestFieldBooleanProvider.java    |  48 [31m---[m
+ .../itas/core/bytecode/TestFieldByteProvider.java  |  48 [31m---[m
+ .../itas/core/bytecode/TestFieldCharProvider.java  |  48 [31m---[m
+ .../core/bytecode/TestFieldDoubleProvider.java     |  48 [31m---[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |  15 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumIntProvider.java    |  28 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumStringProvider.java |  15 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldFloatProvider.java |  48 [31m---[m
+ .../itas/core/bytecode/TestFieldIntProvider.java   |  48 [31m---[m
+ .../itas/core/bytecode/TestFieldListProvider.java  |  89 [32m+[m[31m----[m
+ .../itas/core/bytecode/TestFieldLongProvider.java  |  49 [31m---[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   |  93 [32m+[m[31m----[m
+ .../core/bytecode/TestFieldResourcesProvider.java  |  27 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   |  90 [32m+[m[31m----[m
+ .../itas/core/bytecode/TestFieldShortProvider.java |  49 [31m---[m
+ .../core/bytecode/TestFieldSimpleProvider.java     |  44 [32m+[m[31m--[m
+ .../core/bytecode/TestFieldStringProvider.java     |  49 [31m---[m
+ .../itas/core/bytecode/TestFieldTimestampCode.java |  16 [32m+[m[31m-[m
+ .../core/bytecode/TestMethodColneProvider.java     |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |  68 [32m+[m[31m---[m
+ .../java/org/itas/core/bytecode/TestModel.java     |  95 [31m-----[m
+ .../test/java/org/itas/core/bytecode/TestType.java | 236 [32m+++++[m[31m------[m
+ utils/build.gradle                                 |   6 [32m+[m[31m-[m
+ utils/src/main/java/org/itas/util/GUID.java        |   8 [32m+[m[31m-[m
+ utils/src/main/java/org/itas/util/GenericInfo.java |   2 [32m+[m[31m-[m
+ utils/src/main/java/org/itas/util/Utils.java       |   1 [32m+[m
+ .../main/java/org/itas/util/thread/ThreadPool.java |   2 [32m+[m[31m-[m
+ .../test/java/org/itas/util/GenericInfoTest.java   |  10 [32m+[m
+ 145 files changed, 4465 insertions(+), 4762 deletions(-)
+
+[33mcommit 4c7058f53c2f305e76058ad9db58b78bd17a701b[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 19 14:00:11 2015 +0800
+
+    ignore files
+
+ .gitignore                                         |    4 [32m+[m[31m-[m
+ .gradle/2.1/taskArtifacts/cache.properties         |    1 [31m-[m
+ .gradle/2.1/taskArtifacts/cache.properties.lock    |  Bin [31m17[m -> [32m0[m bytes
+ .gradle/2.1/taskArtifacts/fileHashes.bin           |  Bin [31m19013[m -> [32m0[m bytes
+ .gradle/2.1/taskArtifacts/fileSnapshots.bin        |  Bin [31m21327[m -> [32m0[m bytes
+ .gradle/2.1/taskArtifacts/outputFileStates.bin     |  Bin [31m18722[m -> [32m0[m bytes
+ .gradle/2.1/taskArtifacts/taskArtifacts.bin        |  Bin [31m24395[m -> [32m0[m bytes
+ .gradle/2.2/taskArtifacts/cache.properties         |    1 [31m-[m
+ .gradle/2.2/taskArtifacts/cache.properties.lock    |  Bin [31m17[m -> [32m0[m bytes
+ .gradle/2.2/taskArtifacts/fileHashes.bin           |  Bin [31m76404[m -> [32m0[m bytes
+ .gradle/2.2/taskArtifacts/fileSnapshots.bin        |  Bin [31m321976[m -> [32m0[m bytes
+ .gradle/2.2/taskArtifacts/outputFileStates.bin     |  Bin [31m19052[m -> [32m0[m bytes
+ .gradle/2.2/taskArtifacts/taskArtifacts.bin        |  Bin [31m34244[m -> [32m0[m bytes
+ .idea/.name                                        |    1 [31m-[m
+ .idea/codeStyleSettings.xml                        |   13 [31m-[m
+ .idea/compiler.xml                                 |   23 [31m-[m
+ .idea/copyright/profiles_settings.xml              |    3 [31m-[m
+ .idea/dictionaries/liuzhen.xml                     |    3 [31m-[m
+ .idea/encodings.xml                                |    4 [31m-[m
+ .idea/gradle.xml                                   |   19 [31m-[m
+ .idea/inspectionProfiles/Project_Default.xml       |   16 [31m-[m
+ .idea/inspectionProfiles/profiles_settings.xml     |    7 [31m-[m
+ ...radle__ch_qos_logback_logback_classic_1_1_2.xml |   11 [31m-[m
+ .../Gradle__ch_qos_logback_logback_core_1_1_2.xml  |   11 [31m-[m
+ .../Gradle__com_google_guava_guava_17_0.xml        |   11 [31m-[m
+ .../Gradle__com_jolbox_bonecp_0_8_0_RELEASE.xml    |   11 [31m-[m
+ ...adle__com_mysql_jdbc_mysql_connector_5_1_22.xml |   11 [31m-[m
+ .../Gradle__com_typesafe_config_1_0_1.xml          |   11 [31m-[m
+ .idea/libraries/Gradle__guice_guice_1_0.xml        |   11 [31m-[m
+ .idea/libraries/Gradle__junit_junit_4_9.xml        |   11 [31m-[m
+ .../Gradle__nio_netty_all_5_0_0_Alpha1.xml         |   11 [31m-[m
+ .../Gradle__org_hamcrest_hamcrest_core_1_1.xml     |   11 [31m-[m
+ .../Gradle__org_javassist_javassist_3_18_2_GA.xml  |   11 [31m-[m
+ .../Gradle__org_slf4j_slf4j_api_1_7_7.xml          |   11 [31m-[m
+ .idea/misc.xml                                     |  159 [31m--[m
+ .idea/modules.xml                                  |   10 [31m-[m
+ .idea/scopes/scope_settings.xml                    |    5 [31m-[m
+ .idea/uiDesigner.xml                               |  124 [31m--[m
+ .idea/vcs.xml                                      |    7 [31m-[m
+ .idea/workspace.xml                                | 1810 [31m--------------------[m
+ 40 files changed, 2 insertions(+), 2340 deletions(-)
+
+[33mcommit d824a68eaa6ea8d567d50e5c3155bb370f06463a[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 19 13:59:04 2015 +0800
+
+    ignore files
+
+ .gitignore                                         |   8 [32m+[m[31m-[m
+ .idea/workspace.xml                                |  12 [32m+[m[31m-[m
+ core/build/classes/main/application.conf           |  40 [31m---[m
+ core/build/classes/main/logback-test.xml           |  74 [31m----[m
+ core/build/classes/test/application.conf           |  40 [31m---[m
+ core/build/classes/test/logback-test.xml           |  74 [31m----[m
+ .../tests/classes/org.itas.core.TestAll.html       |  94 [31m------[m
+ .../org.itas.core.bytecode.TestByteCodes.html      | 207 [31m------------[m
+ .../org.itas.core.bytecode.TestCodeType.html       | 105 [31m------[m
+ ...tas.core.bytecode.TestFieldBooleanProvider.html |  95 [31m------[m
+ ...g.itas.core.bytecode.TestFieldByteProvider.html |  95 [31m------[m
+ ...g.itas.core.bytecode.TestFieldCharProvider.html |  95 [31m------[m
+ ...itas.core.bytecode.TestFieldDoubleProvider.html |  95 [31m------[m
+ ...as.core.bytecode.TestFieldEnumByteProvider.html |  95 [31m------[m
+ ...tas.core.bytecode.TestFieldEnumIntProvider.html |  95 [31m------[m
+ ....core.bytecode.TestFieldEnumStringProvider.html |  95 [31m------[m
+ ....itas.core.bytecode.TestFieldFloatProvider.html |  95 [31m------[m
+ ...rg.itas.core.bytecode.TestFieldIntProvider.html |  95 [31m------[m
+ ...g.itas.core.bytecode.TestFieldListProvider.html | 125 [31m-------[m
+ ...g.itas.core.bytecode.TestFieldLongProvider.html |  95 [31m------[m
+ ...rg.itas.core.bytecode.TestFieldMapProvider.html | 125 [31m-------[m
+ ...s.core.bytecode.TestFieldResourcesProvider.html |  95 [31m------[m
+ ...rg.itas.core.bytecode.TestFieldSetProvider.html | 125 [31m-------[m
+ ....itas.core.bytecode.TestFieldShortProvider.html |  95 [31m------[m
+ ...itas.core.bytecode.TestFieldSimpleProvider.html |  95 [31m------[m
+ ...itas.core.bytecode.TestFieldStringProvider.html |  95 [31m------[m
+ ....itas.core.bytecode.TestFieldTimestampCode.html |  95 [31m------[m
+ ...itas.core.bytecode.TestMethodColneProvider.html | 108 [31m------[m
+ ...g.itas.core.bytecode.TestMethodSQLProvider.html | 271 [31m---------------[m
+ .../classes/org.itas.core.bytecode.TestType.html   | 165 [31m---------[m
+ .../org.itas.core.util.DataContainersTest.html     | 164 [31m---------[m
+ core/build/reports/tests/css/base-style.css        | 161 [31m---------[m
+ core/build/reports/tests/css/style.css             |  84 [31m-----[m
+ core/build/reports/tests/index.html                | 374 [31m---------------------[m
+ core/build/reports/tests/js/report.js              | 101 [31m------[m
+ .../tests/packages/org.itas.core.bytecode.html     | 329 [31m------------------[m
+ .../reports/tests/packages/org.itas.core.html      |  97 [31m------[m
+ .../reports/tests/packages/org.itas.core.util.html |  97 [31m------[m
+ core/build/resources/main/application.conf         |  40 [31m---[m
+ core/build/resources/main/logback-test.xml         |  74 [31m----[m
+ .../test-results/TEST-org.itas.core.TestAll.xml    |   6 [31m-[m
+ .../TEST-org.itas.core.bytecode.TestByteCodes.xml  | 100 [31m------[m
+ .../TEST-org.itas.core.bytecode.TestCodeType.xml   |  10 [31m-[m
+ ...itas.core.bytecode.TestFieldBooleanProvider.xml |   8 [31m-[m
+ ...rg.itas.core.bytecode.TestFieldByteProvider.xml |   8 [31m-[m
+ ...rg.itas.core.bytecode.TestFieldCharProvider.xml |   8 [31m-[m
+ ....itas.core.bytecode.TestFieldDoubleProvider.xml |   8 [31m-[m
+ ...tas.core.bytecode.TestFieldEnumByteProvider.xml |   8 [31m-[m
+ ...itas.core.bytecode.TestFieldEnumIntProvider.xml |   8 [31m-[m
+ ...s.core.bytecode.TestFieldEnumStringProvider.xml |   8 [31m-[m
+ ...g.itas.core.bytecode.TestFieldFloatProvider.xml |   8 [31m-[m
+ ...org.itas.core.bytecode.TestFieldIntProvider.xml |   8 [31m-[m
+ ...rg.itas.core.bytecode.TestFieldListProvider.xml |  14 [31m-[m
+ ...rg.itas.core.bytecode.TestFieldLongProvider.xml |   8 [31m-[m
+ ...org.itas.core.bytecode.TestFieldMapProvider.xml |  14 [31m-[m
+ ...as.core.bytecode.TestFieldResourcesProvider.xml |   8 [31m-[m
+ ...org.itas.core.bytecode.TestFieldSetProvider.xml |  14 [31m-[m
+ ...g.itas.core.bytecode.TestFieldShortProvider.xml |   8 [31m-[m
+ ....itas.core.bytecode.TestFieldSimpleProvider.xml |   8 [31m-[m
+ ....itas.core.bytecode.TestFieldStringProvider.xml |   8 [31m-[m
+ ...g.itas.core.bytecode.TestFieldTimestampCode.xml |   8 [31m-[m
+ ....itas.core.bytecode.TestMethodColneProvider.xml |  12 [31m-[m
+ ...rg.itas.core.bytecode.TestMethodSQLProvider.xml | 135 [31m--------[m
+ .../TEST-org.itas.core.bytecode.TestType.xml       |  22 [31m--[m
+ .../TEST-org.itas.core.util.DataContainersTest.xml |  20 [31m--[m
+ core/build/test-results/binary/test/output.bin     | 164 [31m---------[m
+ core/build/test-results/binary/test/output.bin.idx | Bin [31m605[m -> [32m0[m bytes
+ core/build/test-results/binary/test/results.bin    | Bin [31m8228[m -> [32m0[m bytes
+ .../tmp/test/jar_extract_3839131680609994021_tmp   |   0
+ .../tmp/test/jar_extract_7050811226085961876_tmp   |   0
+ core/core.iml                                      | 164 [31m---------[m
+ itas-core.iml                                      |  14 [31m-[m
+ utils/build/classes/main/logback-test.xml          |  96 [31m------[m
+ utils/build/classes/main/logback-test.xml.file     | 154 [31m---------[m
+ utils/build/classes/test/logback-test.xml          |  96 [31m------[m
+ utils/build/classes/test/logback-test.xml.file     | 154 [31m---------[m
+ utils/build/resources/main/logback-test.xml        |  96 [31m------[m
+ utils/build/resources/main/logback-test.xml.file   | 154 [31m---------[m
+ utils/build/tmp/jar/MANIFEST.MF                    |   5 [31m-[m
+ utils/utils.iml                                    |  79 [31m-----[m
+ 80 files changed, 12 insertions(+), 6150 deletions(-)
+
+[33mcommit f75279a5452929eb1fb0f2bbe95dbf87d077730a[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 19 13:51:40 2015 +0800
+
+    ignore files
+
+ .gitignore | 8 [32m++++[m[31m----[m
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+[33mcommit b5bd865a8ab2ced81842bcf27a97b5051a4e54b3[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 19 13:51:04 2015 +0800
+
+    ignore files
+
+ .gitignore                                      |    8 [32m+[m[31m-[m
+ .gradle/2.1/taskArtifacts/cache.properties      |    1 [32m+[m
+ .gradle/2.1/taskArtifacts/cache.properties.lock |  Bin [31m0[m -> [32m17[m bytes
+ .gradle/2.1/taskArtifacts/fileHashes.bin        |  Bin [31m0[m -> [32m19013[m bytes
+ .gradle/2.1/taskArtifacts/fileSnapshots.bin     |  Bin [31m0[m -> [32m21327[m bytes
+ .gradle/2.1/taskArtifacts/outputFileStates.bin  |  Bin [31m0[m -> [32m18722[m bytes
+ .gradle/2.1/taskArtifacts/taskArtifacts.bin     |  Bin [31m0[m -> [32m24395[m bytes
+ .gradle/2.2/taskArtifacts/cache.properties      |    1 [32m+[m
+ .gradle/2.2/taskArtifacts/cache.properties.lock |  Bin [31m0[m -> [32m17[m bytes
+ .gradle/2.2/taskArtifacts/fileHashes.bin        |  Bin [31m0[m -> [32m76404[m bytes
+ .gradle/2.2/taskArtifacts/fileSnapshots.bin     |  Bin [31m0[m -> [32m321976[m bytes
+ .gradle/2.2/taskArtifacts/outputFileStates.bin  |  Bin [31m0[m -> [32m19052[m bytes
+ .gradle/2.2/taskArtifacts/taskArtifacts.bin     |  Bin [31m0[m -> [32m34244[m bytes
+ .idea/.name                                     |    1 [32m+[m
+ .idea/compiler.xml                              |   23 [32m+[m
+ .idea/copyright/profiles_settings.xml           |    3 [32m+[m
+ .idea/encodings.xml                             |    4 [32m+[m
+ .idea/misc.xml                                  |  159 [32m++[m
+ .idea/modules.xml                               |   10 [32m+[m
+ .idea/scopes/scope_settings.xml                 |    5 [32m+[m
+ .idea/vcs.xml                                   |    7 [32m+[m
+ .idea/workspace.xml                             | 1806 [32m+++++++++++++++++++++++[m
+ 22 files changed, 2024 insertions(+), 4 deletions(-)
+
+[33mcommit 68e2586f90caeccbf10cec59485a553c9a2c4dbd[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 19 11:46:34 2015 +0800
+
+    test
+
+ .gitignore                                         |   7 [32m+[m[31m-[m
+ .idea/codeStyleSettings.xml                        |  13 [32m+[m
+ .idea/dictionaries/liuzhen.xml                     |   3 [32m+[m
+ .idea/gradle.xml                                   |  19 [32m+[m
+ .idea/inspectionProfiles/Project_Default.xml       |  16 [32m+[m
+ .idea/inspectionProfiles/profiles_settings.xml     |   7 [32m+[m
+ ...radle__ch_qos_logback_logback_classic_1_1_2.xml |  11 [32m+[m
+ .../Gradle__ch_qos_logback_logback_core_1_1_2.xml  |  11 [32m+[m
+ .../Gradle__com_google_guava_guava_17_0.xml        |  11 [32m+[m
+ .../Gradle__com_jolbox_bonecp_0_8_0_RELEASE.xml    |  11 [32m+[m
+ ...adle__com_mysql_jdbc_mysql_connector_5_1_22.xml |  11 [32m+[m
+ .../Gradle__com_typesafe_config_1_0_1.xml          |  11 [32m+[m
+ .idea/libraries/Gradle__guice_guice_1_0.xml        |  11 [32m+[m
+ .idea/libraries/Gradle__junit_junit_4_9.xml        |  11 [32m+[m
+ .../Gradle__nio_netty_all_5_0_0_Alpha1.xml         |  11 [32m+[m
+ .../Gradle__org_hamcrest_hamcrest_core_1_1.xml     |  11 [32m+[m
+ .../Gradle__org_javassist_javassist_3_18_2_GA.xml  |  11 [32m+[m
+ .../Gradle__org_slf4j_slf4j_api_1_7_7.xml          |  11 [32m+[m
+ .idea/uiDesigner.xml                               | 124 [32m++++++[m
+ README.md                                          |   2 [32m+[m[31m-[m
+ build.gradle                                       |  22 [32m+[m[31m-[m
+ core/.gitignore                                    |   2 [31m-[m
+ core/build.gradle                                  |   6 [32m+[m[31m-[m
+ core/build/classes/main/application.conf           |  40 [32m++[m
+ core/build/classes/main/logback-test.xml           |  74 [32m++++[m
+ core/build/classes/test/application.conf           |  40 [32m++[m
+ core/build/classes/test/logback-test.xml           |  74 [32m++++[m
+ .../tests/classes/org.itas.core.TestAll.html       |  94 [32m+++++[m
+ .../org.itas.core.bytecode.TestByteCodes.html      | 207 [32m++++++++++[m
+ .../org.itas.core.bytecode.TestCodeType.html       | 105 [32m+++++[m
+ ...tas.core.bytecode.TestFieldBooleanProvider.html |  95 [32m+++++[m
+ ...g.itas.core.bytecode.TestFieldByteProvider.html |  95 [32m+++++[m
+ ...g.itas.core.bytecode.TestFieldCharProvider.html |  95 [32m+++++[m
+ ...itas.core.bytecode.TestFieldDoubleProvider.html |  95 [32m+++++[m
+ ...as.core.bytecode.TestFieldEnumByteProvider.html |  95 [32m+++++[m
+ ...tas.core.bytecode.TestFieldEnumIntProvider.html |  95 [32m+++++[m
+ ....core.bytecode.TestFieldEnumStringProvider.html |  95 [32m+++++[m
+ ....itas.core.bytecode.TestFieldFloatProvider.html |  95 [32m+++++[m
+ ...rg.itas.core.bytecode.TestFieldIntProvider.html |  95 [32m+++++[m
+ ...g.itas.core.bytecode.TestFieldListProvider.html | 125 [32m++++++[m
+ ...g.itas.core.bytecode.TestFieldLongProvider.html |  95 [32m+++++[m
+ ...rg.itas.core.bytecode.TestFieldMapProvider.html | 125 [32m++++++[m
+ ...s.core.bytecode.TestFieldResourcesProvider.html |  95 [32m+++++[m
+ ...rg.itas.core.bytecode.TestFieldSetProvider.html | 125 [32m++++++[m
+ ....itas.core.bytecode.TestFieldShortProvider.html |  95 [32m+++++[m
+ ...itas.core.bytecode.TestFieldSimpleProvider.html |  95 [32m+++++[m
+ ...itas.core.bytecode.TestFieldStringProvider.html |  95 [32m+++++[m
+ ....itas.core.bytecode.TestFieldTimestampCode.html |  95 [32m+++++[m
+ ...itas.core.bytecode.TestMethodColneProvider.html | 108 [32m++++++[m
+ ...g.itas.core.bytecode.TestMethodSQLProvider.html | 271 [32m+++++++++++++[m
+ .../classes/org.itas.core.bytecode.TestType.html   | 165 [32m++++++++[m
+ .../org.itas.core.util.DataContainersTest.html     | 164 [32m++++++++[m
+ core/build/reports/tests/css/base-style.css        | 161 [32m++++++++[m
+ core/build/reports/tests/css/style.css             |  84 [32m++++[m
+ core/build/reports/tests/index.html                | 374 [32m++++++++++++++++++[m
+ core/build/reports/tests/js/report.js              | 101 [32m+++++[m
+ .../tests/packages/org.itas.core.bytecode.html     | 329 [32m++++++++++++++++[m
+ .../reports/tests/packages/org.itas.core.html      |  97 [32m+++++[m
+ .../reports/tests/packages/org.itas.core.util.html |  97 [32m+++++[m
+ core/build/resources/main/application.conf         |  40 [32m++[m
+ core/build/resources/main/logback-test.xml         |  74 [32m++++[m
+ .../test-results/TEST-org.itas.core.TestAll.xml    |   6 [32m+[m
+ .../TEST-org.itas.core.bytecode.TestByteCodes.xml  | 100 [32m+++++[m
+ .../TEST-org.itas.core.bytecode.TestCodeType.xml   |  10 [32m+[m
+ ...itas.core.bytecode.TestFieldBooleanProvider.xml |   8 [32m+[m
+ ...rg.itas.core.bytecode.TestFieldByteProvider.xml |   8 [32m+[m
+ ...rg.itas.core.bytecode.TestFieldCharProvider.xml |   8 [32m+[m
+ ....itas.core.bytecode.TestFieldDoubleProvider.xml |   8 [32m+[m
+ ...tas.core.bytecode.TestFieldEnumByteProvider.xml |   8 [32m+[m
+ ...itas.core.bytecode.TestFieldEnumIntProvider.xml |   8 [32m+[m
+ ...s.core.bytecode.TestFieldEnumStringProvider.xml |   8 [32m+[m
+ ...g.itas.core.bytecode.TestFieldFloatProvider.xml |   8 [32m+[m
+ ...org.itas.core.bytecode.TestFieldIntProvider.xml |   8 [32m+[m
+ ...rg.itas.core.bytecode.TestFieldListProvider.xml |  14 [32m+[m
+ ...rg.itas.core.bytecode.TestFieldLongProvider.xml |   8 [32m+[m
+ ...org.itas.core.bytecode.TestFieldMapProvider.xml |  14 [32m+[m
+ ...as.core.bytecode.TestFieldResourcesProvider.xml |   8 [32m+[m
+ ...org.itas.core.bytecode.TestFieldSetProvider.xml |  14 [32m+[m
+ ...g.itas.core.bytecode.TestFieldShortProvider.xml |   8 [32m+[m
+ ....itas.core.bytecode.TestFieldSimpleProvider.xml |   8 [32m+[m
+ ....itas.core.bytecode.TestFieldStringProvider.xml |   8 [32m+[m
+ ...g.itas.core.bytecode.TestFieldTimestampCode.xml |   8 [32m+[m
+ ....itas.core.bytecode.TestMethodColneProvider.xml |  12 [32m+[m
+ ...rg.itas.core.bytecode.TestMethodSQLProvider.xml | 135 [32m+++++++[m
+ .../TEST-org.itas.core.bytecode.TestType.xml       |  22 [32m++[m
+ .../TEST-org.itas.core.util.DataContainersTest.xml |  20 [32m+[m
+ core/build/test-results/binary/test/output.bin     | 164 [32m++++++++[m
+ core/build/test-results/binary/test/output.bin.idx | Bin [31m0[m -> [32m605[m bytes
+ core/build/test-results/binary/test/results.bin    | Bin [31m0[m -> [32m8228[m bytes
+ .../tmp/test/jar_extract_3839131680609994021_tmp   |   0
+ .../tmp/test/jar_extract_7050811226085961876_tmp   |   0
+ core/core.iml                                      | 164 [32m++++++++[m
+ core/src/main/java/org/itas/buffer/Service.java    |  13 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/BindManager.java  | 432 [32m++++++++++[m[31m-----------[m
+ .../src/main/java/org/itas/core/ConfigHandler.java |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Dispatch.java     |   3 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/User.java         |   1 [32m+[m
+ .../java/org/itas/core/dispatch/HookDispatch.java  |   2 [31m-[m
+ core/src/test/java/org/itas/core/TestAll.java      |  52 [32m+[m[31m--[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |   2 [32m+[m
+ .../java/org/itas/core/bytecode/TestModel.java     |   2 [32m+[m[31m-[m
+ .../org/itas/core/util/DataContainersTest.java     |   1 [32m+[m
+ gradle/wrapper/gradle-wrapper.properties           |   2 [32m+[m[31m-[m
+ itas-core.iml                                      |  14 [32m+[m
+ utils/.gitignore                                   |   1 [31m-[m
+ utils/bin/logback-test.xml                         |  96 [31m-----[m
+ utils/bin/logback-test.xml.file                    | 154 [31m--------[m
+ utils/build.gradle                                 |   6 [32m+[m[31m-[m
+ utils/build/classes/main/logback-test.xml          |  96 [32m+++++[m
+ utils/build/classes/main/logback-test.xml.file     | 154 [32m++++++++[m
+ utils/build/classes/test/logback-test.xml          |  96 [32m+++++[m
+ utils/build/classes/test/logback-test.xml.file     | 154 [32m++++++++[m
+ utils/build/resources/main/logback-test.xml        |  96 [32m+++++[m
+ utils/build/resources/main/logback-test.xml.file   | 154 [32m++++++++[m
+ utils/build/tmp/jar/MANIFEST.MF                    |   5 [32m+[m
+ utils/src/main/java/org/itas/util/GUID.java        |   2 [32m+[m
+ utils/utils.iml                                    |  79 [32m++++[m
+ 117 files changed, 6745 insertions(+), 521 deletions(-)
+
+[33mcommit 05101b19ee49b91fcda6fecdce757f063f0b1786[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Mar 16 16:58:04 2015 +0800
+
+    resource|module initalized
+
+ .../main/java/org/itas/core/AbstractDBSync.java    |  17 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/BindManager.java  | 174 [32m++++++++++++[m[31m---------[m
+ core/src/main/java/org/itas/core/Binding.java      |  12 [32m+[m[31m-[m
+ .../main/java/org/itas/core/ContextListener.java   |  17 [31m--[m
+ core/src/main/java/org/itas/core/DBSync.java       |  18 [32m+[m[31m--[m
+ .../src/main/java/org/itas/core/DBSyncService.java |   9 [32m++[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java |  96 [32m+++++++[m[31m-----[m
+ core/src/main/java/org/itas/core/GameObject.java   |   8 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/OnService.java    |  24 [31m---[m
+ core/src/main/java/org/itas/core/Pool.java         |  16 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/ResPoolImpl.java  | 139 [32m++++++[m[31m----------[m
+ core/src/main/java/org/itas/core/ServerModule.java |  10 [32m+[m[31m-[m
+ .../java/org/itas/core/ServiceInitialized.java     |  44 [32m++++++[m
+ .../core/bytecode/MethodSQLUpdateProvider.java     |   4 [32m+[m
+ .../java/org/itas/core/database/DBSyncImpl.java    |  53 [32m+++++[m[31m--[m
+ .../java/org/itas/core/database/DBSyncService.java |  98 [31m------------[m
+ .../org/itas/core/database/DBSyncServiceImpl.java  |  97 [32m++++++++++++[m
+ .../org/itas/core/database/DataBaseManager.java    |   2 [32m+[m[31m-[m
+ utils/bin/.gitignore                               |   1 [31m-[m
+ 19 files changed, 448 insertions(+), 391 deletions(-)
+
+[33mcommit 66fc6bbad6c314d64752b0ca897a423f2ea939c0[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Fri Mar 13 14:31:05 2015 +0800
+
+    unkown
+
+ .../main/java/org/itas/core/AbstractHandler.java   | 100 [32m++++++++++[m
+ core/src/main/java/org/itas/core/AbstractXml.java  |  72 [32m+++++++[m
+ core/src/main/java/org/itas/core/BindManager.java  | 120 [32m+++++++++++[m[31m-[m
+ core/src/main/java/org/itas/core/Binding.java      |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Config.java       |   6 [32m+[m
+ .../src/main/java/org/itas/core/ConfigHandler.java |  97 [32m++++++++++[m
+ .../main/java/org/itas/core/ConfigPoolImpl.java    | 132 [32m+++++++++++++[m
+ .../main/java/org/itas/core/IllegaException.java   |  22 [31m---[m
+ .../main/java/org/itas/core/IllnessException.java  |  22 [32m+++[m
+ core/src/main/java/org/itas/core/OnService.java    |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Pool.java         |   7 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/ResPoolImpl.java  | 208 [32m+++++++++++++++++++++[m
+ core/src/main/java/org/itas/core/Resource.java     |  63 [32m+++++++[m
+ .../main/java/org/itas/core/ResourceHandler.java   |  64 [32m+++++++[m
+ core/src/main/java/org/itas/core/Simple.java       |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/XmlHandler.java   |  16 [32m++[m
+ .../itas/core/bytecode/AbstractTypeProvider.java   |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |  10 [32m+[m[31m-[m
+ .../java/org/itas/core/resource/AbstractXml.java   |  69 [31m-------[m
+ .../org/itas/core/resource/AbstractXmlHandler.java |  64 [31m-------[m
+ .../src/main/java/org/itas/core/resource/Conf.java |   6 [31m-[m
+ .../main/java/org/itas/core/resource/ResPool.java  | 133 [31m-------------[m
+ .../main/java/org/itas/core/resource/Resource.java |  68 [31m-------[m
+ .../org/itas/core/resource/XConfigHandler.java     | 114 [31m-----------[m
+ .../org/itas/core/resource/XResourceHandler.java   |  65 [31m-------[m
+ .../main/java/org/itas/core/util/AutoClose.java    |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/ClassLoaders.java | 158 [32m++++++++++++++++[m
+ .../java/org/itas/core/util/CtClassLoader.java     |  68 [31m-------[m
+ core/src/main/java/org/itas/core/util/Utils.java   |  46 [31m-----[m
+ .../java/org/itas/core/util/XmlContainers.java     |   6 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestByteCodes.java |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldListProvider.java  |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   |   2 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldResourcesProvider.java  |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestModel.java     |   2 [32m+[m[31m-[m
+ .../test/java/org/itas/core/bytecode/TestType.java |   2 [32m+[m[31m-[m
+ 37 files changed, 1072 insertions(+), 688 deletions(-)
+
+[33mcommit e5d3c0a63eed314d78b66870e845dc81ad66edde[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Tue Mar 10 17:27:08 2015 +0800
+
+    support pair type
+
+ core/src/main/java/org/itas/core/Enums.java        | 121 [31m--------[m
+ core/src/main/java/org/itas/core/GameObject.java   |   4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Simple.java       |   3 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |   8 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   |  16 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |   8 [32m+[m[31m-[m
+ .../java/org/itas/core/resource/AbstractXml.java   | 266 [32m+[m[31m---------------[m
+ .../main/java/org/itas/core/resource/ResPool.java  |   4 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resource/Resource.java |  92 [32m+++[m[31m---[m
+ .../java/org/itas/core/util/DataContainers.java    | 340 [32m+++++++++++++++++++++[m
+ core/src/main/java/org/itas/core/util/Enums.java   | 129 [32m++++++++[m
+ .../main/java/org/itas/core/util/GameObjects.java  | 322 [31m-------------------[m
+ .../java/org/itas/core/util/XmlContainers.java     | 296 [32m++++++++++++++++++[m
+ core/src/test/java/org/itas/core/TestAll.java      |   2 [32m+[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldListProvider.java  |  32 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   |  56 [32m++[m[31m--[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   |  32 [32m+[m[31m-[m
+ .../org/itas/core/util/DataContainersTest.java     |  91 [32m++++++[m
+ 19 files changed, 988 insertions(+), 836 deletions(-)
+
+[33mcommit 8f5676be62e32928a2d152684075d05706db5cc4[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Mar 9 17:12:00 2015 +0800
+
+    xml resouce
+
+ README.md                                          |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java |  19 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/EnumInt.java      |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Enums.java        | 121 [32m++++++++[m
+ core/src/main/java/org/itas/core/Pool.java         | 147 [32m+++++[m[31m----[m
+ core/src/main/java/org/itas/core/ServerModule.java |   2 [32m+[m[31m-[m
+ .../core/bytecode/FieldEnumStringProvider.java     |   2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/net/RmiClient.java | 180 [32m+++++[m[31m------[m
+ .../src/main/java/org/itas/core/net/RmiServer.java | 136 [32m++++[m[31m-----[m
+ .../org/itas/core/resource/AbstractHandler.java    |  68 [31m-----[m
+ .../java/org/itas/core/resource/AbstractXml.java   | 336 [32m++++++++++++++++++[m[31m---[m
+ .../org/itas/core/resource/AbstractXmlHandler.java |  64 [32m++++[m
+ .../main/java/org/itas/core/resource/HostRes.java  |  50 [31m---[m
+ .../main/java/org/itas/core/resource/Resource.java |   2 [32m+[m[31m-[m
+ .../org/itas/core/resource/XConfigHandler.java     |   4 [32m+[m[31m-[m
+ .../org/itas/core/resource/XResourceHandler.java   |  10 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/GenericUtil.java  | 191 [31m------------[m
+ core/src/main/java/org/itas/core/util/Utils.java   | 102 [31m-------[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |  21 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumIntProvider.java    |   2 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumStringProvider.java |  18 [31m--[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |   6 [32m+[m[31m-[m
+ 22 files changed, 754 insertions(+), 731 deletions(-)
+
+[33mcommit 5da4c0a0ef58870ebf5ac319a1c1dfd13774bd3e[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Fri Mar 6 17:34:13 2015 +0800
+
+    init pool
+
+ .../main/java/org/itas/core/AbstractDBSync.java    |  14 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/BindManager.java  |  94 [32m+++++++++[m
+ core/src/main/java/org/itas/core/Binding.java      |   7 [32m+[m[31m-[m
+ .../main/java/org/itas/core/ContextListener.java   |  17 [32m++[m
+ core/src/main/java/org/itas/core/DBPool.java       |  12 [31m--[m
+ core/src/main/java/org/itas/core/DBSync.java       |  17 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/DataPool.java     | 209 [31m-------------------[m
+ core/src/main/java/org/itas/core/DataPoolImpl.java | 226 [32m+++++++++++++++++++++[m
+ core/src/main/java/org/itas/core/GameObject.java   |  19 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Ioc.java          |  10 [32m+[m
+ core/src/main/java/org/itas/core/OnService.java    |  24 [32m+++[m
+ core/src/main/java/org/itas/core/Pool.java         |  30 [32m++[m[31m-[m
+ core/src/main/java/org/itas/core/ServerInit.java   |  87 [31m--------[m
+ core/src/main/java/org/itas/core/ServerModule.java |  43 [32m++++[m
+ core/src/main/java/org/itas/core/Service.java      |   9 [31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |  67 [32m++++[m[31m--[m
+ .../itas/core/bytecode/MethodDoAlterProvider.java  | 110 [32m+++++[m[31m-----[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/database/DBPoolImpl.java    |   3 [32m+[m[31m-[m
+ .../java/org/itas/core/database/DBSyncImpl.java    |  20 [32m+[m[31m-[m
+ .../java/org/itas/core/database/DBSyncService.java |  19 [32m+[m[31m-[m
+ .../org/itas/core/database/DataBaseManager.java    |  24 [32m+++[m
+ .../java/org/itas/core/database/DataBases.java     |  24 [31m---[m
+ .../java/org/itas/core/util/CtClassLoader.java     |  20 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |   3 [31m-[m
+ 25 files changed, 637 insertions(+), 473 deletions(-)
+
+[33mcommit abe02f0d01a3e7d75e705eb1a628ee16a9537013[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Mar 5 18:16:14 2015 +0800
+
+    database syn for core
+
+ build.gradle                                       |   1 [32m+[m
+ .../main/java/org/itas/core/AbstractDBSync.java    | 394 [32m+++++++++++[m[31m----------[m
+ core/src/main/java/org/itas/core/BindListener.java |  17 [31m-[m
+ core/src/main/java/org/itas/core/Binding.java      |  12 [32m+[m
+ core/src/main/java/org/itas/core/Builder.java      |   7 [32m+[m
+ core/src/main/java/org/itas/core/DBPool.java       |  12 [32m+[m
+ core/src/main/java/org/itas/core/DBSync.java       |  56 [32m++[m[31m-[m
+ core/src/main/java/org/itas/core/DataPool.java     |  75 [32m++[m[31m--[m
+ core/src/main/java/org/itas/core/GameObject.java   |  10 [32m+[m[31m-[m
+ .../main/java/org/itas/core/GameServerInit.java    |  74 [31m----[m
+ .../main/java/org/itas/core/IllegaException.java   |  22 [32m++[m
+ core/src/main/java/org/itas/core/Pool.java         |  23 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/PoolInitImpl.java |  21 [31m--[m
+ core/src/main/java/org/itas/core/ServerInit.java   |  87 [32m+++++[m
+ core/src/main/java/org/itas/core/Service.java      |   9 [32m+[m
+ core/src/main/java/org/itas/core/Simple.java       |  98 [32m++[m[31m---[m
+ .../main/java/org/itas/core/UnDeFineException.java |  26 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/User.java         |   5 [32m+[m
+ .../itas/core/bytecode/AbstractMethodProvider.java |   3 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     | 106 [32m++++[m[31m--[m
+ .../itas/core/bytecode/MethodDoAlterProvider.java  |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoDeleteProvider.java |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoFillProvider.java   |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoInsertProvider.java |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoSelectProvider.java |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoUpdateProvider.java |   2 [32m+[m[31m-[m
+ .../core/bytecode/MethodSQLDeleteProvider.java     |   1 [31m-[m
+ .../core/bytecode/MethodSQLInsertProvider.java     |   1 [31m-[m
+ .../core/bytecode/MethodSQLSelectProvider.java     |   1 [31m-[m
+ .../core/bytecode/MethodSQLUpdateProvider.java     |   1 [31m-[m
+ .../core/bytecode/MethodTableNameProvider.java     |   1 [31m-[m
+ .../main/java/org/itas/core/database/DBPool.java   |  34 [31m--[m
+ .../java/org/itas/core/database/DBPoolImpl.java    |  97 [32m+++++[m
+ .../java/org/itas/core/database/DBSyncImpl.java    | 111 [32m+++[m[31m---[m
+ .../org/itas/core/database/DBSyncInitImpl.java     |  42 [31m---[m
+ .../java/org/itas/core/database/DBSyncService.java |  99 [32m++++++[m
+ .../java/org/itas/core/database/DBSyncThread.java  |  95 [31m-----[m
+ .../java/org/itas/core/database/DBTemplete.java    | 386 [32m++++++++++[m[31m----------[m
+ .../java/org/itas/core/database/DataBases.java     |  24 [32m++[m
+ .../java/org/itas/core/database/DataSource.java    |  57 [31m---[m
+ .../main/java/org/itas/core/util/AutoClose.java    |  15 [32m+[m
+ .../java/org/itas/core/util/ByteCodeUtils.java     |  19 [31m-[m
+ .../java/org/itas/core/util/CtClassLoader.java     |  52 [32m+++[m
+ .../src/main/java/org/itas/core/util/DataBase.java |  19 [32m+[m
+ .../main/java/org/itas/core/util/JsonParser.java   | 117 [31m------[m
+ .../src/main/java/org/itas/core/util/SQLUtils.java |  18 [31m-[m
+ core/src/main/resources/logback-test.xml           |   6 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestByteCodes.java |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |   6 [32m+[m
+ 50 files changed, 1183 insertions(+), 1106 deletions(-)
+
+[33mcommit 7151ea4129c08f27ec1d29ffd52574e8b3e28512[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Wed Mar 4 17:33:15 2015 +0800
+
+    set method add modify
+
+ core/src/main/java/org/itas/core/DBSync.java       |  68 [32m++[m[31m--[m
+ core/src/main/java/org/itas/core/DataPool.java     | 365 [32m+++++++++[m[31m------------[m
+ core/src/main/java/org/itas/core/GameObject.java   |   6 [32m+[m[31m-[m
+ .../main/java/org/itas/core/GameServerInit.java    |   1 [31m-[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |  15 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/ByteCodeMethods.java    |   3 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodeUtils.java |  45 [31m---[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldBooleanProvider.java   |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldByteProvider.java  |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldCharProvider.java  |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldDoubleProvider.java    |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldEnumByteProvider.java  |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldEnumIntProvider.java   |   7 [32m+[m[31m-[m
+ .../core/bytecode/FieldEnumStringProvider.java     |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldFloatProvider.java |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldIntProvider.java   |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldLongProvider.java  |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldResourcesProvider.java |   7 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldShortProvider.java |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldSimpleProvider.java    |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldStringProvider.java    |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldTimestampProvider.java |   5 [32m+[m[31m-[m
+ .../bytecode/MethodSetMethodModifyProvider.java    | 103 [32m++++++[m
+ .../java/org/itas/core/util/ByteCodeUtils.java     |  43 [32m+[m[31m--[m
+ .../main/java/org/itas/core/util/Constructors.java |  30 [32m++[m
+ .../main/java/org/itas/core/util/FirstChar.java    |  37 [32m+++[m
+ core/src/main/java/org/itas/core/util/Utils.java   |  68 [31m----[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  11 [32m+[m[31m-[m
+ 32 files changed, 422 insertions(+), 477 deletions(-)
+
+[33mcommit 03c0fbb14c0b4c1acb1e29d1e767535f241d79d1[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Tue Mar 3 17:11:45 2015 +0800
+
+    dababase syn
+
+ .../java/net/itas/core/annotation/CanNull.java     |  13 [31m-[m
+ .../main/java/net/itas/core/annotation/Clazz.java  |  12 [31m-[m
+ .../main/java/net/itas/core/annotation/Key.java    |  12 [31m-[m
+ .../java/net/itas/core/annotation/NamedArg.java    |  14 [31m-[m
+ .../java/net/itas/core/annotation/PrimaryfKey.java |  12 [31m-[m
+ .../main/java/net/itas/core/annotation/RmiRef.java |  15 [31m-[m
+ .../java/net/itas/core/annotation/SQLEntity.java   |  12 [31m-[m
+ .../main/java/net/itas/core/annotation/Size.java   |  12 [31m-[m
+ .../main/java/net/itas/core/annotation/UnSave.java |  19 [31m-[m
+ .../main/java/net/itas/core/dispatch/Handle.java   |  29 [31m--[m
+ .../java/net/itas/core/dispatch/HookDispatch.java  |  31 [31m--[m
+ .../java/net/itas/core/dispatch/ItasDispatch.java  |  58 [31m---[m
+ .../java/net/itas/core/dispatch/JsonDispatch.java  |  30 [31m--[m
+ .../net/itas/core/dispatch/ProtocolDispatch.java   |  29 [31m--[m
+ .../java/net/itas/core/dispatch/XmlDispatch.java   |  29 [31m--[m
+ .../net/itas/core/exception/DoubleException.java   |  27 [31m--[m
+ .../core/exception/FieldNotConfigException.java    |  27 [31m--[m
+ .../net/itas/core/exception/UnDeFineException.java |  27 [31m--[m
+ core/src/main/java/net/itas/core/jdbc/DBPool.java  |  42 [31m--[m
+ .../main/java/net/itas/core/jdbc/DBTemplete.java   | 194 [31m--------[m
+ .../main/java/net/itas/core/jdbc/DataSource.java   |  57 [31m---[m
+ .../src/main/java/net/itas/core/jdbc/JdbcType.java | 260 [31m-----------[m
+ .../main/java/net/itas/core/jdbc/RowMapper.java    |  10 [31m-[m
+ .../main/java/org/itas/core/AbstractDBSync.java    | 240 [32m++++++++++[m
+ core/src/main/java/org/itas/core/BindListener.java |  17 [32m+[m
+ core/src/main/java/org/itas/core/CallBack.java     |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/DBSync.java       |  84 [32m++++[m
+ core/src/main/java/org/itas/core/DataPool.java     | 507 [32m++++++++++[m[31m-----------[m
+ core/src/main/java/org/itas/core/Dispatch.java     |   5 [32m+[m[31m-[m
+ .../main/java/org/itas/core/DoubleException.java   |  22 [32m+[m
+ core/src/main/java/org/itas/core/Factory.java      |  46 [31m--[m
+ .../org/itas/core/FieldNotConfigException.java     |  22 [32m+[m
+ core/src/main/java/org/itas/core/GameBase.java     | 186 [31m--------[m
+ .../main/java/org/itas/core/GameBaseAotuID.java    |  20 [31m-[m
+ core/src/main/java/org/itas/core/GameObject.java   | 166 [32m++++++[m[31m-[m
+ .../main/java/org/itas/core/GameObjectAotuID.java  |  20 [32m+[m
+ .../main/java/org/itas/core/GameServerInit.java    |  75 [32m+++[m
+ core/src/main/java/org/itas/core/Index.java        |  13 [31m-[m
+ core/src/main/java/org/itas/core/PoolInitImpl.java |  21 [32m+[m
+ core/src/main/java/org/itas/core/Primary.java      |  13 [31m-[m
+ core/src/main/java/org/itas/core/Rule.java         |  23 [31m-[m
+ core/src/main/java/org/itas/core/SQLCore.java      | 347 [31m--------------[m
+ core/src/main/java/org/itas/core/SQLDirtys.java    |  86 [31m----[m
+ .../src/main/java/org/itas/core/SQLPersistent.java | 119 [31m-----[m
+ core/src/main/java/org/itas/core/Script.java       |  54 [31m---[m
+ core/src/main/java/org/itas/core/Simple.java       |  12 [32m+[m[31m-[m
+ .../main/java/org/itas/core/UnDeFineException.java |  22 [32m+[m
+ core/src/main/java/org/itas/core/Unique.java       |  13 [31m-[m
+ core/src/main/java/org/itas/core/User.java         |   5 [32m+[m[31m-[m
+ .../java/org/itas/core/annotation/CanNull.java     |  13 [32m+[m
+ .../main/java/org/itas/core/annotation/Clazz.java  |  12 [32m+[m
+ .../main/java/org/itas/core/annotation/Index.java  |  13 [32m+[m
+ .../java/org/itas/core/annotation/Primary.java     |  13 [32m+[m
+ .../main/java/org/itas/core/annotation/RmiRef.java |  15 [32m+[m
+ .../java/org/itas/core/annotation/SQLEntity.java   |  14 [32m+[m
+ .../main/java/org/itas/core/annotation/Size.java   |  14 [32m+[m
+ .../main/java/org/itas/core/annotation/UnSave.java |  19 [32m+[m
+ .../main/java/org/itas/core/annotation/Unique.java |  13 [32m+[m
+ .../itas/core/bytecode/AbstractTypeProvider.java   |   4 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodeUtils.java |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |   2 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |   4 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   |   4 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java |   6 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/bytecode/Type.java |   4 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/TypeStringProvider.java |   3 [32m+[m[31m-[m
+ .../main/java/org/itas/core/database/DBPool.java   |  34 [32m++[m
+ .../java/org/itas/core/database/DBSyncImpl.java    |  75 [32m+++[m
+ .../org/itas/core/database/DBSyncInitImpl.java     |  42 [32m++[m
+ .../java/org/itas/core/database/DBSyncThread.java  |  95 [32m++++[m
+ .../java/org/itas/core/database/DBTemplete.java    | 194 [32m++++++++[m
+ .../java/org/itas/core/database/DataSource.java    |  57 [32m+++[m
+ .../java/org/itas/core/database/RowMapper.java     |  10 [32m+[m
+ .../main/java/org/itas/core/dispatch/Handle.java   |  29 [32m++[m
+ .../java/org/itas/core/dispatch/HookDispatch.java  |  31 [32m++[m
+ .../java/org/itas/core/dispatch/ItasDispatch.java  |  57 [32m+++[m
+ .../java/org/itas/core/dispatch/JsonDispatch.java  |  30 [32m++[m
+ .../org/itas/core/dispatch/ProtocolDispatch.java   |  29 [32m++[m
+ .../java/org/itas/core/dispatch/XmlDispatch.java   |  29 [32m++[m
+ .../src/main/java/org/itas/core/net/GameScene.java | 133 [32m++++++[m
+ .../src/main/java/org/itas/core/net/GameWorld.java | 351 [32m++++++++++++++[m
+ core/src/main/java/org/itas/core/net/IoUtil.java   | 114 [32m+++++[m
+ core/src/main/java/org/itas/core/net/Message.java  | 154 [32m+++++++[m
+ .../java/org/itas/core/net/MessageDecoder.java     |  63 [32m+++[m
+ .../java/org/itas/core/net/MessageEncoder.java     |  19 [32m+[m
+ .../src/main/java/org/itas/core/net/NioClient.java |  79 [32m++++[m
+ .../java/org/itas/core/net/NioClientHandler.java   |  57 [32m+++[m
+ .../org/itas/core/net/NioClientInitializer.java    |  19 [32m+[m
+ .../src/main/java/org/itas/core/net/NioServer.java |  60 [32m+++[m
+ .../java/org/itas/core/net/NioServerHandler.java   |  81 [32m++++[m
+ .../org/itas/core/net/NioServerInitializer.java    |  21 [32m+[m
+ core/src/main/java/org/itas/core/net/Rmi.java      |  10 [32m+[m
+ .../src/main/java/org/itas/core/net/RmiClient.java |  90 [32m++++[m
+ .../src/main/java/org/itas/core/net/RmiServer.java |  68 [32m+++[m
+ .../java/org/itas/core/net/SessionListener.java    |  34 [32m++[m
+ .../main/java/org/itas/core/net/nio/GameScene.java | 134 [31m------[m
+ .../main/java/org/itas/core/net/nio/GameWorld.java | 351 [31m--------------[m
+ .../main/java/org/itas/core/net/nio/IoUtil.java    | 114 [31m-----[m
+ .../main/java/org/itas/core/net/nio/Message.java   | 153 [31m-------[m
+ .../java/org/itas/core/net/nio/MessageDecoder.java |  63 [31m---[m
+ .../java/org/itas/core/net/nio/MessageEncoder.java |  21 [31m-[m
+ .../org/itas/core/net/nio/SessionListener.java     |  34 [31m--[m
+ .../org/itas/core/net/nio/client/NioClient.java    |  79 [31m----[m
+ .../itas/core/net/nio/client/NioClientHandler.java |  59 [31m---[m
+ .../core/net/nio/client/NioClientInitializer.java  |  22 [31m-[m
+ .../org/itas/core/net/nio/server/NioServer.java    |  60 [31m---[m
+ .../itas/core/net/nio/server/NioServerHandler.java |  83 [31m----[m
+ .../core/net/nio/server/NioServerInitializer.java  |  23 [31m-[m
+ core/src/main/java/org/itas/core/net/rmi/Rmi.java  |  10 [31m-[m
+ .../main/java/org/itas/core/net/rmi/RmiClient.java |  90 [31m----[m
+ .../main/java/org/itas/core/net/rmi/RmiServer.java |  69 [31m---[m
+ .../java/org/itas/core/resource/AbstractXml.java   |   5 [31m-[m
+ .../main/java/org/itas/core/resource/ResPool.java  |  10 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resource/Resource.java |   9 [32m+[m[31m-[m
+ .../org/itas/core/resource/XConfigHandler.java     |   9 [32m+[m[31m-[m
+ .../java/org/itas/core/util/ByteCodeUtils.java     |   7 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/CharEncoding.java |  20 [32m+[m
+ .../main/java/org/itas/core/util/GenericUtil.java  |   3 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/util/SQLUtils.java |  18 [32m+[m
+ core/src/main/java/org/itas/core/util/Utils.java   |   2 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldListProvider.java  |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   |   4 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldSimpleProvider.java     |   4 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |   9 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestModel.java     |   7 [32m+[m[31m-[m
+ utils/bin/.gitignore                               |   1 [32m+[m
+ .../src/main/java/org/itas/util/ItasException.java |   5 [31m-[m
+ utils/src/main/java/org/itas/util/Utils.java       |  19 [31m-[m
+ 130 files changed, 3212 insertions(+), 3628 deletions(-)
+
+[33mcommit 061b50f3d506b366803b802ce200bae2e0f90b93[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Mar 2 18:04:04 2015 +0800
+
+    byte code finish
+
+ core/src/main/java/org/itas/core/GameBase.java     |  45 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/SQLCore.java      |   4 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/UnPersistence.java |  12 [31m-[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |  71 [32m+[m[31m--[m
+ .../itas/core/bytecode/AbstractMethodProvider.java |  46 [32m+[m[31m-[m
+ .../itas/core/bytecode/AbstractTypeProvider.java   | 162 [32m+++++++[m
+ .../org/itas/core/bytecode/ByteCodeMethods.java    |  55 [32m+++[m
+ .../java/org/itas/core/bytecode/ByteCodeUtils.java |  45 [32m++[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     | 219 [32m+[m[31m--------[m
+ .../itas/core/bytecode/FieldBooleanProvider.java   |  13 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldByteProvider.java  |  12 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldCharProvider.java  |  16 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldContainerProvider.java |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldDoubleProvider.java    |  15 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldEnumByteProvider.java  |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldEnumIntProvider.java   |  15 [32m+[m[31m-[m
+ .../core/bytecode/FieldEnumStringProvider.java     |  14 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldFloatProvider.java |  15 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldIntProvider.java   |  15 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |  21 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldLongProvider.java  |  15 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   |  19 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/FieldProvider.java |  12 [32m+[m
+ .../itas/core/bytecode/FieldResourcesProvider.java |  17 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |  21 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/FieldShortProvider.java |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldSimpleProvider.java    |  15 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldStringProvider.java    |  15 [32m+[m[31m-[m
+ .../itas/core/bytecode/FieldTimestampProvider.java |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodCloneProvider.java    |   7 [32m+[m[31m-[m
+ .../itas/core/bytecode/MethodDoAlterProvider.java  |  76 [32m++++[m
+ .../itas/core/bytecode/MethodDoCreateProvider.java |  84 [32m++++[m
+ .../itas/core/bytecode/MethodDoDeleteProvider.java |  71 [32m+++[m
+ .../itas/core/bytecode/MethodDoFillProvider.java   |  65 [32m+++[m
+ .../itas/core/bytecode/MethodDoInsertProvider.java |  69 [32m+++[m
+ .../itas/core/bytecode/MethodDoSelectProvider.java |  86 [32m++++[m
+ .../itas/core/bytecode/MethodDoUpdateProvider.java |  88 [32m++++[m
+ .../org/itas/core/bytecode/MethodProvider.java     |  40 [32m++[m
+ .../core/bytecode/MethodSQLDeleteProvider.java     |  50 [32m+++[m
+ .../core/bytecode/MethodSQLInsertProvider.java     |  68 [32m+++[m
+ .../org/itas/core/bytecode/MethodSQLProvider.java  | 398 [31m-----------------[m
+ .../core/bytecode/MethodSQLSelectProvider.java     |  57 [32m+++[m
+ .../core/bytecode/MethodSQLUpdateProvider.java     |  58 [32m+++[m
+ .../core/bytecode/MethodTableNameProvider.java     |  32 [32m++[m
+ .../main/java/org/itas/core/bytecode/Modify.java   |  55 [31m---[m
+ .../src/main/java/org/itas/core/bytecode/Type.java | 200 [32m+++++++++[m
+ .../itas/core/bytecode/TypeBooleanProvider.java    |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeByteProvider.java   |  31 [32m++[m
+ .../org/itas/core/bytecode/TypeCharProvider.java   |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeDoubleProvider.java |  29 [32m++[m
+ .../itas/core/bytecode/TypeEnumByteProvider.java   |  29 [32m++[m
+ .../itas/core/bytecode/TypeEnumIntProvider.java    |  29 [32m++[m
+ .../itas/core/bytecode/TypeEnumStringProvider.java |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeFloatProvider.java  |  29 [32m++[m
+ .../bytecode/TypeGameObjectAutoIdProvider.java     |  37 [32m++[m
+ .../itas/core/bytecode/TypeGameObjectProvider.java |  37 [32m++[m
+ .../org/itas/core/bytecode/TypeIntProvider.java    |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeListProvider.java   |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeLongProvider.java   |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeMapProvider.java    |  29 [32m++[m
+ .../java/org/itas/core/bytecode/TypeProvider.java  |  42 [32m++[m
+ .../itas/core/bytecode/TypeResourceProvider.java   |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeSetProvider.java    |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeShortProvider.java  |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeSimpleProvider.java |  29 [32m++[m
+ .../org/itas/core/bytecode/TypeStringProvider.java |  32 [32m++[m
+ .../itas/core/bytecode/TypeTimestampProvider.java  |  29 [32m++[m
+ .../java/org/itas/core/util/ByteCodeUtils.java     |  45 [32m++[m
+ core/src/main/java/org/itas/core/util/Type.java    | 489 [31m---------------------[m
+ core/src/test/java/org/itas/core/TestAll.java      |   5 [32m+[m[31m-[m
+ .../src/test/java/org/itas/core/TestByteCodes.java |  42 [31m--[m
+ .../java/org/itas/core/bytecode/TestByteCodes.java |  15 [32m+[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  22 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldBooleanProvider.java    |  10 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldByteProvider.java  |  10 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldCharProvider.java  |  10 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldDoubleProvider.java     |  10 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |  10 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumIntProvider.java    |  10 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldEnumStringProvider.java |  10 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldFloatProvider.java |  10 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldIntProvider.java   |  10 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldListProvider.java  |  34 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldLongProvider.java  |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   |  18 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldResourcesProvider.java  |  16 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   |  34 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldShortProvider.java |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldSimpleProvider.java     |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldStringProvider.java     |  13 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestFieldTimestampCode.java |  13 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestMethod.java    |  38 [32m++[m
+ .../core/bytecode/TestMethodColneProvider.java     |   5 [32m+[m[31m-[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  |  49 [32m+[m[31m--[m
+ .../TestMethodStatementDeleteProvider.java         |   5 [32m+[m
+ .../java/org/itas/core/bytecode/TestModel.java     |  42 [32m+[m[31m-[m
+ .../test/java/org/itas/core/bytecode/TestType.java | 144 [32m++++++[m
+ .../src/test/java/org/itas/core/util/TestType.java | 143 [31m------[m
+ 98 files changed, 2596 insertions(+), 1807 deletions(-)
+
+[33mcommit d02cc015ea54d9ea5c9b9fcedb3c39ae2a4d8cc8[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Sat Feb 28 17:58:48 2015 +0800
+
+    byte code for select|update|delete|insert SQL
+
+ core/src/main/java/org/itas/core/Index.java        |  13 [32m+[m
+ core/src/main/java/org/itas/core/Primary.java      |  13 [32m+[m
+ .../src/main/java/org/itas/core/UnPersistence.java |  12 [32m+[m
+ core/src/main/java/org/itas/core/Unique.java       |  13 [32m+[m
+ .../core/bytecode/AbStractContainerProvider.java   |  88 [31m-----[m
+ .../itas/core/bytecode/AbstractFieldProvider.java  |  79 [32m++++[m
+ .../itas/core/bytecode/AbstractMethodProvider.java |  98 [32m+++++[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     | 193 [32m+[m[31m---------[m
+ .../itas/core/bytecode/CodeBooleanProvider.java    |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeByteProvider.java   |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeCharProvider.java   |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeDoubleProvider.java |  33 [31m--[m
+ .../itas/core/bytecode/CodeEnumByteProvider.java   |  44 [31m---[m
+ .../itas/core/bytecode/CodeEnumIntProvider.java    |  45 [31m---[m
+ .../itas/core/bytecode/CodeEnumStringProvider.java |  44 [31m---[m
+ .../org/itas/core/bytecode/CodeFloatProvider.java  |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeIntProvider.java    |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeListProvider.java   |  88 [31m-----[m
+ .../org/itas/core/bytecode/CodeLongProvider.java   |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeMapProvider.java    | 103 [31m------[m
+ .../itas/core/bytecode/CodeResourcesProvider.java  |  51 [31m---[m
+ .../org/itas/core/bytecode/CodeSetProvider.java    |  88 [31m-----[m
+ .../org/itas/core/bytecode/CodeShortProvider.java  |  34 [31m--[m
+ .../org/itas/core/bytecode/CodeSimpleProvider.java |  51 [31m---[m
+ .../org/itas/core/bytecode/CodeStringProvider.java |  34 [31m--[m
+ .../itas/core/bytecode/CodeTimestampProvider.java  |  34 [31m--[m
+ .../main/java/org/itas/core/bytecode/Delete.java   |   5 [31m-[m
+ .../itas/core/bytecode/FieldBooleanProvider.java   |  34 [32m++[m
+ .../org/itas/core/bytecode/FieldByteProvider.java  |  34 [32m++[m
+ .../org/itas/core/bytecode/FieldCharProvider.java  |  34 [32m++[m
+ .../itas/core/bytecode/FieldContainerProvider.java |  88 [32m+++++[m
+ .../itas/core/bytecode/FieldDoubleProvider.java    |  33 [32m++[m
+ .../itas/core/bytecode/FieldEnumByteProvider.java  |  44 [32m+++[m
+ .../itas/core/bytecode/FieldEnumIntProvider.java   |  45 [32m+++[m
+ .../core/bytecode/FieldEnumStringProvider.java     |  44 [32m+++[m
+ .../org/itas/core/bytecode/FieldFloatProvider.java |  34 [32m++[m
+ .../org/itas/core/bytecode/FieldIntProvider.java   |  34 [32m++[m
+ .../org/itas/core/bytecode/FieldListProvider.java  |  88 [32m+++++[m
+ .../org/itas/core/bytecode/FieldLongProvider.java  |  34 [32m++[m
+ .../org/itas/core/bytecode/FieldMapProvider.java   | 104 [32m++++++[m
+ .../itas/core/bytecode/FieldResourcesProvider.java |  51 [32m+++[m
+ .../org/itas/core/bytecode/FieldSetProvider.java   |  88 [32m+++++[m
+ .../org/itas/core/bytecode/FieldShortProvider.java |  34 [32m++[m
+ .../itas/core/bytecode/FieldSimpleProvider.java    |  51 [32m+++[m
+ .../itas/core/bytecode/FieldStringProvider.java    |  34 [32m++[m
+ .../itas/core/bytecode/FieldTimestampProvider.java |  34 [32m++[m
+ .../main/java/org/itas/core/bytecode/Insert.java   |   5 [31m-[m
+ .../itas/core/bytecode/MethodCloneProvider.java    |  63 [32m++++[m
+ .../org/itas/core/bytecode/MethodSQLProvider.java  | 398 [32m+++++++++++++++++++++[m
+ .../main/java/org/itas/core/bytecode/Provider.java | 106 [32m+[m[31m-----[m
+ .../main/java/org/itas/core/bytecode/Update.java   |   5 [31m-[m
+ core/src/main/java/org/itas/core/util/Type.java    | 107 [32m++++++[m
+ core/src/test/java/org/itas/core/TestAll.java      |  74 [32m++[m[31m--[m
+ .../core/bytecode/TestCodeBooleanProvider.java     |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeByteProvider.java   |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeCharProvider.java   |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeDoubleProvider.java |  52 [31m---[m
+ .../core/bytecode/TestCodeEnumByteProvider.java    |  86 [31m-----[m
+ .../core/bytecode/TestCodeEnumIntProvider.java     |  86 [31m-----[m
+ .../core/bytecode/TestCodeEnumStringProvider.java  |  86 [31m-----[m
+ .../itas/core/bytecode/TestCodeFloatProvider.java  |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeIntProvider.java    |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeListProvider.java   | 266 [31m--------------[m
+ .../itas/core/bytecode/TestCodeLongProvider.java   |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeMapProvider.java    | 266 [31m--------------[m
+ .../core/bytecode/TestCodeResourcesProvider.java   |  85 [31m-----[m
+ .../itas/core/bytecode/TestCodeSetProvider.java    | 266 [31m--------------[m
+ .../itas/core/bytecode/TestCodeShortProvider.java  |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeSimpleProvider.java | 107 [31m------[m
+ .../itas/core/bytecode/TestCodeStringProvider.java |  52 [31m---[m
+ .../itas/core/bytecode/TestCodeTimestampCode.java  |  54 [31m---[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |   4 [32m+[m[31m-[m
+ .../core/bytecode/TestFieldBooleanProvider.java    |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldByteProvider.java  |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldCharProvider.java  |  52 [32m+++[m
+ .../core/bytecode/TestFieldDoubleProvider.java     |  52 [32m+++[m
+ .../core/bytecode/TestFieldEnumByteProvider.java   |  86 [32m+++++[m
+ .../core/bytecode/TestFieldEnumIntProvider.java    |  86 [32m+++++[m
+ .../core/bytecode/TestFieldEnumStringProvider.java |  86 [32m+++++[m
+ .../itas/core/bytecode/TestFieldFloatProvider.java |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldIntProvider.java   |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldListProvider.java  | 266 [32m++++++++++++++[m
+ .../itas/core/bytecode/TestFieldLongProvider.java  |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldMapProvider.java   | 295 [32m+++++++++++++++[m
+ .../core/bytecode/TestFieldResourcesProvider.java  |  85 [32m+++++[m
+ .../itas/core/bytecode/TestFieldSetProvider.java   | 266 [32m++++++++++++++[m
+ .../itas/core/bytecode/TestFieldShortProvider.java |  52 [32m+++[m
+ .../core/bytecode/TestFieldSimpleProvider.java     | 107 [32m++++++[m
+ .../core/bytecode/TestFieldStringProvider.java     |  52 [32m+++[m
+ .../itas/core/bytecode/TestFieldTimestampCode.java |  54 [32m+++[m
+ .../core/bytecode/TestMethodColneProvider.java     |  38 [32m++[m
+ .../itas/core/bytecode/TestMethodSQLProvider.java  | 240 [32m+++++++++++++[m
+ .../java/org/itas/core/bytecode/TestModel.java     |  76 [32m++++[m
+ 93 files changed, 3950 insertions(+), 3044 deletions(-)
+
+[33mcommit d81df6fc020011b3d99d0f2f3ddd2902d80df65f[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Fri Feb 27 18:09:00 2015 +0800
+
+    support list|set|map
+
+ .../src/main/java/net/itas/core/jdbc/JdbcType.java |  12 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/EnumByte.java     |   8 [32m+[m
+ core/src/main/java/org/itas/core/EnumInt.java      |   8 [32m+[m
+ core/src/main/java/org/itas/core/EnumString.java   |   8 [32m+[m
+ .../core/bytecode/AbStractContainerProvider.java   |  88 [32m+++++[m
+ .../org/itas/core/bytecode/AbStractGeneric.java    | 132 [31m-------[m
+ .../java/org/itas/core/bytecode/ByteCodeType.java  | 255 [31m--------------[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     | 331 [32m++++[m[31m--------------[m
+ .../itas/core/bytecode/CodeBooleanProvider.java    |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeByteProvider.java   |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeCharProvider.java   |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeDoubleProvider.java |  33 [32m++[m
+ .../itas/core/bytecode/CodeEnumByteProvider.java   |  44 [32m+++[m
+ .../itas/core/bytecode/CodeEnumIntProvider.java    |  45 [32m+++[m
+ .../itas/core/bytecode/CodeEnumStringProvider.java |  44 [32m+++[m
+ .../org/itas/core/bytecode/CodeFloatProvider.java  |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeIntProvider.java    |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeListProvider.java   |  88 [32m+++++[m
+ .../org/itas/core/bytecode/CodeLongProvider.java   |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeMapProvider.java    | 103 [32m++++++[m
+ .../itas/core/bytecode/CodeResourcesProvider.java  |  51 [32m+++[m
+ .../org/itas/core/bytecode/CodeSetProvider.java    |  88 [32m+++++[m
+ .../org/itas/core/bytecode/CodeShortProvider.java  |  34 [32m++[m
+ .../org/itas/core/bytecode/CodeSimpleProvider.java |  51 [32m+++[m
+ .../org/itas/core/bytecode/CodeStringProvider.java |  34 [32m++[m
+ .../itas/core/bytecode/CodeTimestampProvider.java  |  34 [32m++[m
+ .../main/java/org/itas/core/bytecode/Provider.java | 109 [32m++++++[m
+ .../core/bytecode/StatementBooleanProvider.java    |  34 [31m--[m
+ .../itas/core/bytecode/StatementByteProvider.java  |  34 [31m--[m
+ .../itas/core/bytecode/StatementCharProvider.java  |  34 [31m--[m
+ .../core/bytecode/StatementDoubleProvider.java     |  33 [31m--[m
+ .../itas/core/bytecode/StatementFloatProvider.java |  34 [31m--[m
+ .../itas/core/bytecode/StatementIntProvider.java   |  34 [31m--[m
+ .../itas/core/bytecode/StatementListProvider.java  |  62 [31m----[m
+ .../itas/core/bytecode/StatementLongProvider.java  |  34 [31m--[m
+ .../core/bytecode/StatementResourcesProvider.java  |  51 [31m---[m
+ .../itas/core/bytecode/StatementShortProvider.java |  34 [31m--[m
+ .../core/bytecode/StatementSimpleProvider.java     |  51 [31m---[m
+ .../core/bytecode/StatementStringProvider.java     |  34 [31m--[m
+ .../java/org/itas/core/bytecode/TimestampCode.java |  39 [31m---[m
+ core/src/main/java/org/itas/core/enums/EByte.java  |   8 [31m-[m
+ core/src/main/java/org/itas/core/enums/EInt.java   |   8 [31m-[m
+ .../src/main/java/org/itas/core/enums/EString.java |   8 [31m-[m
+ .../java/org/itas/core/resource/AbstractXml.java   |  12 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/GameObjects.java  |  66 [32m++[m[31m--[m
+ .../main/java/org/itas/core/util/GenericUtil.java  |  12 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/util/Type.java    | 382 [32m+++++++++++++++++++++[m
+ core/src/main/java/org/itas/core/util/Utils.java   | 140 [32m+[m[31m-------[m
+ core/src/test/java/org/itas/core/TestAll.java      |  62 [32m++[m[31m--[m
+ .../core/bytecode/TestCodeBooleanProvider.java     |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeByteProvider.java   |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeCharProvider.java   |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeDoubleProvider.java |  52 [32m+++[m
+ .../core/bytecode/TestCodeEnumByteProvider.java    |  86 [32m+++++[m
+ .../core/bytecode/TestCodeEnumIntProvider.java     |  86 [32m+++++[m
+ .../core/bytecode/TestCodeEnumStringProvider.java  |  86 [32m+++++[m
+ .../itas/core/bytecode/TestCodeFloatProvider.java  |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeIntProvider.java    |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeListProvider.java   | 266 [32m++++++++++++++[m
+ .../itas/core/bytecode/TestCodeLongProvider.java   |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeMapProvider.java    | 266 [32m++++++++++++++[m
+ .../core/bytecode/TestCodeResourcesProvider.java   |  85 [32m+++++[m
+ .../itas/core/bytecode/TestCodeSetProvider.java    | 266 [32m++++++++++++++[m
+ .../itas/core/bytecode/TestCodeShortProvider.java  |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeSimpleProvider.java | 107 [32m++++++[m
+ .../itas/core/bytecode/TestCodeStringProvider.java |  52 [32m+++[m
+ .../itas/core/bytecode/TestCodeTimestampCode.java  |  54 [32m+++[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  12 [32m+[m[31m-[m
+ .../bytecode/TestStatementBooleanProvider.java     |  52 [31m---[m
+ .../core/bytecode/TestStatementByteProvider.java   |  54 [31m---[m
+ .../core/bytecode/TestStatementCharProvider.java   |  54 [31m---[m
+ .../core/bytecode/TestStatementDoubleProvider.java |  54 [31m---[m
+ .../core/bytecode/TestStatementFloatProvider.java  |  52 [31m---[m
+ .../core/bytecode/TestStatementIntProvider.java    |  52 [31m---[m
+ .../core/bytecode/TestStatementListProvider.java   | 121 [31m-------[m
+ .../core/bytecode/TestStatementLongProvider.java   |  52 [31m---[m
+ .../bytecode/TestStatementResourcesProvider.java   |  87 [31m-----[m
+ .../core/bytecode/TestStatementShortProvider.java  |  54 [31m---[m
+ .../core/bytecode/TestStatementSimpleProvider.java | 109 [31m------[m
+ .../core/bytecode/TestStatementStringProvider.java |  54 [31m---[m
+ .../org/itas/core/bytecode/TestTimestampCode.java  |  56 [31m---[m
+ .../src/test/java/org/itas/core/util/TestType.java | 143 [32m++++++++[m
+ 82 files changed, 3545 insertions(+), 2241 deletions(-)
+
+[33mcommit e5e0f3e4077d7d48b63f215b1bc50c040a2331c3[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Feb 26 18:21:56 2015 +0800
+
+    字节码操作
+
+ .../src/main/java/net/itas/core/jdbc/JdbcType.java |   4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/GameBase.java     |   4 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/Pool.java         |   5 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/AbStractGeneric.java    |   6 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodeType.java  |  12 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     |  26 [32m++[m[31m--[m
+ .../main/java/org/itas/core/bytecode/Delete.java   |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/bytecode/Insert.java   |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/bytecode/Modify.java   |   2 [32m+[m[31m-[m
+ .../core/bytecode/StatementBooleanProvider.java    |  44 [32m+++[m[31m---[m
+ .../itas/core/bytecode/StatementByteProvider.java  |  44 [32m+++[m[31m---[m
+ .../itas/core/bytecode/StatementCharProvider.java  |  46 [32m+++[m[31m---[m
+ .../core/bytecode/StatementDoubleProvider.java     |  45 [32m+++[m[31m---[m
+ .../itas/core/bytecode/StatementFloatProvider.java |  34 [32m+++++[m
+ .../itas/core/bytecode/StatementIntProvider.java   |  44 [32m+++[m[31m---[m
+ .../itas/core/bytecode/StatementListProvider.java  | 101 [32m+++++[m[31m---------[m
+ .../itas/core/bytecode/StatementLongProvider.java  |  34 [32m+++++[m
+ .../core/bytecode/StatementResourcesProvider.java  |  98 [32m+++++[m[31m--------[m
+ .../itas/core/bytecode/StatementShortProvider.java |  44 [32m+++[m[31m---[m
+ .../core/bytecode/StatementSimpleProvider.java     |  96 [32m+++++[m[31m--------[m
+ .../core/bytecode/StatementStringProvider.java     |  44 [32m+++[m[31m---[m
+ .../java/org/itas/core/bytecode/TimestampCode.java |   7 [32m+[m[31m-[m
+ .../main/java/org/itas/core/bytecode/Update.java   |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/rmi/RmiClient.java |   3 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/rmi/RmiServer.java |   2 [32m+[m[31m-[m
+ .../org/itas/core/resource/AbstractHandler.java    |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/resource/AbstractXml.java   |   2 [32m+[m[31m-[m
+ .../src/main/java/org/itas/core/resource/Conf.java |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resource/HostRes.java  |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resource/ResPool.java  |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/resource/Resource.java |   2 [32m+[m[31m-[m
+ .../org/itas/core/resource/XConfigHandler.java     |   2 [32m+[m[31m-[m
+ .../org/itas/core/resource/XResourceHandler.java   |   2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/GameObjects.java  |   3 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/GenericUtil.java  |   2 [32m+[m[31m-[m
+ core/src/main/java/org/itas/core/util/Utils.java   |  14 [32m+[m[31m-[m
+ core/src/test/java/org/itas/core/TestAll.java      |  50 [32m+++[m[31m----[m
+ .../src/test/java/org/itas/core/TestByteCodes.java |   2 [32m+[m[31m-[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  57 [32m++++[m[31m----[m
+ .../bytecode/TestStatementBooleanProvider.java     |  11 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementByteProvider.java   |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementCharProvider.java   |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementDoubleProvider.java |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementFloatProvider.java  |  11 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementIntProvider.java    |  11 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementListProvider.java   | 121 [32m++++++++++++++++[m
+ .../core/bytecode/TestStatementLongProvider.java   |  11 [32m+[m[31m-[m
+ .../bytecode/TestStatementResourcesProvider.java   |  44 [32m+++[m[31m---[m
+ .../core/bytecode/TestStatementShortProvider.java  |  13 [32m+[m[31m-[m
+ .../core/bytecode/TestStatementSimpleProvider.java |  42 [32m++++[m[31m--[m
+ .../core/bytecode/TestStatementStringProvider.java |  13 [32m+[m[31m-[m
+ .../org/itas/core/bytecode/TestTimestampCode.java  |   7 [32m+[m[31m-[m
+ utils/bin/.gitignore                               |   4 [31m-[m
+ utils/bin/logback-test.xml                         |  96 [32m+++++++++++++[m
+ utils/bin/logback-test.xml.file                    | 154 [32m+++++++++++++++++++++[m
+ 55 files changed, 893 insertions(+), 579 deletions(-)
+
+[33mcommit 36b54c8c2674c4285f01d0ea483244b565b2311d[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Thu Feb 26 18:21:38 2015 +0800
+
+    字节码操作
+
+ .../net/itas/core/resource/AbstractHandler.java    |  68 [31m---[m
+ .../java/net/itas/core/resource/AbstractXml.java   |  72 [31m---[m
+ .../src/main/java/net/itas/core/resource/Conf.java |   6 [31m-[m
+ .../main/java/net/itas/core/resource/HostRes.java  |  50 [31m--[m
+ .../main/java/net/itas/core/resource/ResPool.java  | 135 [31m-----[m
+ .../main/java/net/itas/core/resource/Resource.java |  73 [31m---[m
+ .../net/itas/core/resource/XConfigHandler.java     | 117 [31m-----[m
+ .../net/itas/core/resource/XResourceHandler.java   |  59 [31m---[m
+ .../org/itas/core/bytecode/AbStractGeneric.java    | 134 [32m+++++[m
+ .../java/org/itas/core/bytecode/ByteCodeType.java  | 255 [32m+++++++++[m
+ .../java/org/itas/core/bytecode/ByteCodes.java     | 584 [32m+++++++++++++++++++++[m
+ .../main/java/org/itas/core/bytecode/Delete.java   |   5 [32m+[m
+ .../main/java/org/itas/core/bytecode/Insert.java   |   5 [32m+[m
+ .../main/java/org/itas/core/bytecode/Modify.java   |  55 [32m++[m
+ .../core/bytecode/StatementBooleanProvider.java    |  42 [32m++[m
+ .../itas/core/bytecode/StatementByteProvider.java  |  42 [32m++[m
+ .../itas/core/bytecode/StatementCharProvider.java  |  42 [32m++[m
+ .../core/bytecode/StatementDoubleProvider.java     |  42 [32m++[m
+ .../itas/core/bytecode/StatementIntProvider.java   |  42 [32m++[m
+ .../itas/core/bytecode/StatementListProvider.java  |  95 [32m++++[m
+ .../core/bytecode/StatementResourcesProvider.java  |  77 [32m+++[m
+ .../itas/core/bytecode/StatementShortProvider.java |  42 [32m++[m
+ .../core/bytecode/StatementSimpleProvider.java     |  75 [32m+++[m
+ .../core/bytecode/StatementStringProvider.java     |  42 [32m++[m
+ .../java/org/itas/core/bytecode/TimestampCode.java |  42 [32m++[m
+ .../main/java/org/itas/core/bytecode/Update.java   |   5 [32m+[m
+ .../main/java/org/itas/core/code/ByteCodes.java    | 584 [31m---------------------[m
+ .../src/main/java/org/itas/core/code/CodeType.java | 255 [31m---------[m
+ core/src/main/java/org/itas/core/code/Modify.java  |  55 [31m--[m
+ .../java/org/itas/core/code/modify/Delete.java     |   5 [31m-[m
+ .../java/org/itas/core/code/modify/Insert.java     |   5 [31m-[m
+ .../java/org/itas/core/code/modify/Update.java     |   5 [31m-[m
+ .../org/itas/core/code/type/AbStractGeneric.java   | 134 [31m-----[m
+ .../java/org/itas/core/code/type/BoolCode.java     |  42 [31m--[m
+ .../java/org/itas/core/code/type/ByteCode.java     |  42 [31m--[m
+ .../java/org/itas/core/code/type/CharCode.java     |  42 [31m--[m
+ .../java/org/itas/core/code/type/DoubleCode.java   |  42 [31m--[m
+ .../java/org/itas/core/code/type/FloatCode.java    |  42 [31m--[m
+ .../main/java/org/itas/core/code/type/IntCode.java |  42 [31m--[m
+ .../java/org/itas/core/code/type/ListCode.java     |  95 [31m----[m
+ .../java/org/itas/core/code/type/LongCode.java     |  42 [31m--[m
+ .../java/org/itas/core/code/type/ShortCode.java    |  42 [31m--[m
+ .../java/org/itas/core/code/type/SimpleCode.java   |  75 [31m---[m
+ .../java/org/itas/core/code/type/SourceCode.java   |  77 [31m---[m
+ .../java/org/itas/core/code/type/StringCode.java   |  42 [31m--[m
+ .../org/itas/core/code/type/TimestampCode.java     |  42 [31m--[m
+ .../org/itas/core/resource/AbstractHandler.java    |  68 [32m+++[m
+ .../java/org/itas/core/resource/AbstractXml.java   |  72 [32m+++[m
+ .../src/main/java/org/itas/core/resource/Conf.java |   6 [32m+[m
+ .../main/java/org/itas/core/resource/HostRes.java  |  50 [32m++[m
+ .../main/java/org/itas/core/resource/ResPool.java  | 135 [32m+++++[m
+ .../main/java/org/itas/core/resource/Resource.java |  73 [32m+++[m
+ .../org/itas/core/resource/XConfigHandler.java     | 117 [32m+++++[m
+ .../org/itas/core/resource/XResourceHandler.java   |  59 [32m+++[m
+ .../java/org/itas/core/bytecode/TestCodeType.java  |  86 [32m+++[m
+ .../bytecode/TestStatementBooleanProvider.java     |  53 [32m++[m
+ .../core/bytecode/TestStatementByteProvider.java   |  53 [32m++[m
+ .../core/bytecode/TestStatementCharProvider.java   |  53 [32m++[m
+ .../core/bytecode/TestStatementDoubleProvider.java |  53 [32m++[m
+ .../core/bytecode/TestStatementFloatProvider.java  |  53 [32m++[m
+ .../core/bytecode/TestStatementIntProvider.java    |  53 [32m++[m
+ .../core/bytecode/TestStatementLongProvider.java   |  53 [32m++[m
+ .../bytecode/TestStatementResourcesProvider.java   |  75 [32m+++[m
+ .../core/bytecode/TestStatementShortProvider.java  |  53 [32m++[m
+ .../core/bytecode/TestStatementSimpleProvider.java |  97 [32m++++[m
+ .../core/bytecode/TestStatementStringProvider.java |  53 [32m++[m
+ .../org/itas/core/bytecode/TestTimestampCode.java  |  55 [32m++[m
+ .../test/java/org/itas/core/code/TestCodeType.java |  86 [31m---[m
+ .../java/org/itas/core/code/type/TestBoolCode.java |  53 [31m--[m
+ .../java/org/itas/core/code/type/TestByteCode.java |  53 [31m--[m
+ .../java/org/itas/core/code/type/TestCharCode.java |  53 [31m--[m
+ .../org/itas/core/code/type/TestDoubleCode.java    |  53 [31m--[m
+ .../org/itas/core/code/type/TestFloatCode.java     |  53 [31m--[m
+ .../java/org/itas/core/code/type/TestIntCode.java  |  53 [31m--[m
+ .../java/org/itas/core/code/type/TestLongCode.java |  53 [31m--[m
+ .../org/itas/core/code/type/TestResourceCode.java  |  75 [31m---[m
+ .../org/itas/core/code/type/TestShortCode.java     |  53 [31m--[m
+ .../org/itas/core/code/type/TestSimpleCode.java    |  97 [31m----[m
+ .../org/itas/core/code/type/TestStringCode.java    |  53 [31m--[m
+ .../org/itas/core/code/type/TestTimestampCode.java |  55 [31m--[m
+ 80 files changed, 2996 insertions(+), 3080 deletions(-)
+
+[33mcommit 0c572b4715c7c6e99d35cd63a4f0a742709da2fd[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Feb 9 17:02:10 2015 +0800
+
+    字节码操作基本类型实现
+
+ build.gradle                                       |    2 [32m+[m[31m-[m
+ core/src/main/java/net/itas/core/CallBack.java     |    8 [31m-[m
+ core/src/main/java/net/itas/core/DataPool.java     |  261 [31m---[m
+ core/src/main/java/net/itas/core/Dispatch.java     |   90 [31m-[m
+ core/src/main/java/net/itas/core/Factory.java      |   46 [31m-[m
+ core/src/main/java/net/itas/core/GameBase.java     |  164 [31m--[m
+ .../main/java/net/itas/core/GameBaseAotuID.java    |   20 [31m-[m
+ core/src/main/java/net/itas/core/GameObject.java   |   93 [31m-[m
+ core/src/main/java/net/itas/core/HashId.java       |   16 [31m-[m
+ core/src/main/java/net/itas/core/Hook.java         |   30 [31m-[m
+ core/src/main/java/net/itas/core/Pool.java         |   82 [31m-[m
+ core/src/main/java/net/itas/core/Rule.java         |   23 [31m-[m
+ core/src/main/java/net/itas/core/SQLCore.java      |  346 [31m----[m
+ core/src/main/java/net/itas/core/SQLDirtys.java    |   85 [31m-[m
+ .../src/main/java/net/itas/core/SQLPersistent.java |  118 [31m--[m
+ core/src/main/java/net/itas/core/Script.java       |   54 [31m-[m
+ core/src/main/java/net/itas/core/Simple.java       |   72 [31m-[m
+ core/src/main/java/net/itas/core/User.java         |  100 [31m--[m
+ .../java/net/itas/core/annotation/ReturnType.java  |   14 [31m-[m
+ .../java/net/itas/core/bytecode/ByteCodes.java     |  920 [31m----------[m
+ .../main/java/net/itas/core/dispatch/Handle.java   |    3 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/HookDispatch.java  |    4 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/ItasDispatch.java  |    8 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/JsonDispatch.java  |    5 [32m+[m[31m-[m
+ .../net/itas/core/dispatch/ProtocolDispatch.java   |    5 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/XmlDispatch.java   |    5 [32m+[m[31m-[m
+ core/src/main/java/net/itas/core/enums/EByte.java  |    8 [31m-[m
+ core/src/main/java/net/itas/core/enums/EInt.java   |    8 [31m-[m
+ .../src/main/java/net/itas/core/enums/EString.java |    8 [31m-[m
+ .../main/java/net/itas/core/jdbc/DBTemplete.java   |    6 [32m+[m[31m-[m
+ .../src/main/java/net/itas/core/jdbc/JdbcType.java |   21 [32m+[m[31m-[m
+ .../net/itas/core/resource/AbstractHandler.java    |    3 [32m+[m[31m-[m
+ .../java/net/itas/core/resource/AbstractXml.java   |   16 [32m+[m[31m-[m
+ .../main/java/net/itas/core/resource/ResPool.java  |   11 [32m+[m[31m-[m
+ .../main/java/net/itas/core/resource/Resource.java |    7 [32m+[m[31m-[m
+ .../net/itas/core/resource/XConfigHandler.java     |    4 [32m+[m[31m-[m
+ .../main/java/net/itas/core/util/GameObjects.java  |  322 [31m----[m
+ .../main/java/net/itas/core/util/GenericUtil.java  |  191 [31m---[m
+ .../main/java/net/itas/core/util/JsonParser.java   |  117 [31m--[m
+ .../main/java/net/itas/core/util/UUIDUtils.java    |   25 [31m-[m
+ core/src/main/java/net/itas/core/util/Utils.java   |  333 [31m----[m
+ core/src/main/java/org/itas/core/CallBack.java     |    8 [32m+[m
+ core/src/main/java/org/itas/core/DataPool.java     |  262 [32m+++[m
+ core/src/main/java/org/itas/core/Dispatch.java     |   90 [32m+[m
+ core/src/main/java/org/itas/core/Factory.java      |   46 [32m+[m
+ core/src/main/java/org/itas/core/GameBase.java     |  165 [32m++[m
+ .../main/java/org/itas/core/GameBaseAotuID.java    |   20 [32m+[m
+ core/src/main/java/org/itas/core/GameObject.java   |   93 [32m+[m
+ core/src/main/java/org/itas/core/HashId.java       |   16 [32m+[m
+ core/src/main/java/org/itas/core/Hook.java         |   30 [32m+[m
+ core/src/main/java/org/itas/core/Pool.java         |   83 [32m+[m
+ core/src/main/java/org/itas/core/Rule.java         |   23 [32m+[m
+ core/src/main/java/org/itas/core/SQLCore.java      |  347 [32m++++[m
+ core/src/main/java/org/itas/core/SQLDirtys.java    |   86 [32m+[m
+ .../src/main/java/org/itas/core/SQLPersistent.java |  119 [32m++[m
+ core/src/main/java/org/itas/core/Script.java       |   54 [32m+[m
+ core/src/main/java/org/itas/core/Simple.java       |   72 [32m+[m
+ core/src/main/java/org/itas/core/User.java         |  100 [32m++[m
+ .../main/java/org/itas/core/code/ByteCodes.java    |  584 [32m+++++++[m
+ .../src/main/java/org/itas/core/code/CodeType.java |  255 [32m+++[m
+ core/src/main/java/org/itas/core/code/Modify.java  |   55 [32m+[m
+ .../java/org/itas/core/code/modify/Delete.java     |    5 [32m+[m
+ .../java/org/itas/core/code/modify/Insert.java     |    5 [32m+[m
+ .../java/org/itas/core/code/modify/Update.java     |    5 [32m+[m
+ .../org/itas/core/code/type/AbStractGeneric.java   |  134 [32m++[m
+ .../java/org/itas/core/code/type/BoolCode.java     |   42 [32m+[m
+ .../java/org/itas/core/code/type/ByteCode.java     |   42 [32m+[m
+ .../java/org/itas/core/code/type/CharCode.java     |   42 [32m+[m
+ .../java/org/itas/core/code/type/DoubleCode.java   |   42 [32m+[m
+ .../java/org/itas/core/code/type/FloatCode.java    |   42 [32m+[m
+ .../main/java/org/itas/core/code/type/IntCode.java |   42 [32m+[m
+ .../java/org/itas/core/code/type/ListCode.java     |   95 [32m++[m
+ .../java/org/itas/core/code/type/LongCode.java     |   42 [32m+[m
+ .../java/org/itas/core/code/type/ShortCode.java    |   42 [32m+[m
+ .../java/org/itas/core/code/type/SimpleCode.java   |   75 [32m+[m
+ .../java/org/itas/core/code/type/SourceCode.java   |   77 [32m+[m
+ .../java/org/itas/core/code/type/StringCode.java   |   42 [32m+[m
+ .../org/itas/core/code/type/TimestampCode.java     |   42 [32m+[m
+ core/src/main/java/org/itas/core/enums/EByte.java  |    8 [32m+[m
+ core/src/main/java/org/itas/core/enums/EInt.java   |    8 [32m+[m
+ .../src/main/java/org/itas/core/enums/EString.java |    8 [32m+[m
+ .../main/java/org/itas/core/net/nio/GameScene.java |    9 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/nio/GameWorld.java |    7 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/nio/IoUtil.java    |    7 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/nio/Message.java   |    8 [32m+[m[31m-[m
+ .../java/org/itas/core/net/nio/MessageDecoder.java |    6 [32m+[m[31m-[m
+ .../java/org/itas/core/net/nio/MessageEncoder.java |    3 [32m+[m[31m-[m
+ .../itas/core/net/nio/client/NioClientHandler.java |    3 [32m+[m[31m-[m
+ .../itas/core/net/nio/server/NioServerHandler.java |    9 [32m+[m[31m-[m
+ .../core/net/nio/server/NioServerInitializer.java  |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/rmi/RmiClient.java |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/net/rmi/RmiServer.java |    2 [32m+[m[31m-[m
+ .../main/java/org/itas/core/util/GameObjects.java  |  323 [32m++++[m
+ .../main/java/org/itas/core/util/GenericUtil.java  |  192 [32m+++[m
+ .../main/java/org/itas/core/util/JsonParser.java   |  117 [32m++[m
+ .../main/java/org/itas/core/util/UUIDUtils.java    |   25 [32m+[m
+ core/src/main/java/org/itas/core/util/Utils.java   |  334 [32m++++[m
+ core/src/test/java/net/itas/core/TestAll.java      |   17 [31m-[m
+ .../src/test/java/net/itas/core/TestByteCodes.java |   42 [31m-[m
+ .../java/net/itas/core/io/rmi/TestExample.java     |   12 [31m-[m
+ .../net/itas/core/io/rmi/TestExampleImple.java     |   27 [31m-[m
+ .../test/java/net/itas/core/io/rmi/TestRemote.java |   35 [31m-[m
+ .../src/test/java/net/itas/core/mode/TestUser.java |  197 [31m---[m
+ core/src/test/java/org/itas/core/TestAll.java      |   40 [32m+[m
+ .../src/test/java/org/itas/core/TestByteCodes.java |   42 [32m+[m
+ .../test/java/org/itas/core/code/TestCodeType.java |   86 [32m+[m
+ .../java/org/itas/core/code/type/TestBoolCode.java |   53 [32m+[m
+ .../java/org/itas/core/code/type/TestByteCode.java |   53 [32m+[m
+ .../java/org/itas/core/code/type/TestCharCode.java |   53 [32m+[m
+ .../org/itas/core/code/type/TestDoubleCode.java    |   53 [32m+[m
+ .../org/itas/core/code/type/TestFloatCode.java     |   53 [32m+[m
+ .../java/org/itas/core/code/type/TestIntCode.java  |   53 [32m+[m
+ .../java/org/itas/core/code/type/TestLongCode.java |   53 [32m+[m
+ .../org/itas/core/code/type/TestResourceCode.java  |   75 [32m+[m
+ .../org/itas/core/code/type/TestShortCode.java     |   53 [32m+[m
+ .../org/itas/core/code/type/TestSimpleCode.java    |   97 [32m++[m
+ .../org/itas/core/code/type/TestStringCode.java    |   53 [32m+[m
+ .../org/itas/core/code/type/TestTimestampCode.java |   55 [32m+[m
+ utils/bin/.gitignore                               |    1 [32m+[m
+ utils/src/main/java/net/itas/util/Base64Coder.java |  128 [31m--[m
+ utils/src/main/java/net/itas/util/GUID.java        |   89 [31m-[m
+ utils/src/main/java/net/itas/util/GenericInfo.java |   85 [31m-[m
+ .../src/main/java/net/itas/util/ItasException.java |   27 [31m-[m
+ utils/src/main/java/net/itas/util/Logger.java      |  181 [31m--[m
+ utils/src/main/java/net/itas/util/Pair.java        |   59 [31m-[m
+ .../main/java/net/itas/util/ScheduledExecutor.java |  117 [31m--[m
+ utils/src/main/java/net/itas/util/TextUtils.java   |    5 [31m-[m
+ utils/src/main/java/net/itas/util/Utils.java       | 1802 [31m--------------------[m
+ .../src/main/java/net/itas/util/XClassLoader.java  |  119 [31m--[m
+ utils/src/main/java/net/itas/util/XResources.java  |  137 [31m--[m
+ utils/src/main/java/net/itas/util/cache/Cache.java |   74 [31m-[m
+ .../main/java/net/itas/util/cache/CacheSizes.java  |  192 [31m---[m
+ .../main/java/net/itas/util/cache/Cacheable.java   |   18 [31m-[m
+ .../itas/util/cache/CalculateSizeException.java    |   13 [31m-[m
+ .../main/java/net/itas/util/cache/LinkedList.java  |  115 [31m--[m
+ .../main/java/net/itas/util/cache/LocalCache.java  |  563 [31m------[m
+ .../net/itas/util/collection/CircularQueue.java    |  130 [31m--[m
+ .../java/net/itas/util/collection/IntHashMap.java  |  646 [31m-------[m
+ .../java/net/itas/util/collection/LimitList.java   |  156 [31m--[m
+ .../java/net/itas/util/collection/SortedList.java  |  192 [31m---[m
+ .../main/java/net/itas/util/http/AbstractHttp.java |  417 [31m-----[m
+ .../main/java/net/itas/util/http/HttpClient.java   |   52 [31m-[m
+ .../main/java/net/itas/util/http/HttpsClient.java  |   85 [31m-[m
+ .../java/net/itas/util/thread/ControlThread.java   |   89 [31m-[m
+ .../main/java/net/itas/util/thread/ThreadPool.java |  360 [31m----[m
+ .../java/net/itas/util/thread/ThreadPoolDog.java   |   67 [31m-[m
+ utils/src/main/java/org/itas/util/Base64Coder.java |  128 [32m++[m
+ utils/src/main/java/org/itas/util/GUID.java        |   89 [32m+[m
+ utils/src/main/java/org/itas/util/GenericInfo.java |   85 [32m+[m
+ .../src/main/java/org/itas/util/ItasException.java |   27 [32m+[m
+ utils/src/main/java/org/itas/util/Logger.java      |  181 [32m++[m
+ utils/src/main/java/org/itas/util/Pair.java        |   59 [32m+[m
+ .../main/java/org/itas/util/ScheduledExecutor.java |  117 [32m++[m
+ utils/src/main/java/org/itas/util/TextUtils.java   |    5 [32m+[m
+ utils/src/main/java/org/itas/util/Utils.java       | 1802 [32m++++++++++++++++++++[m
+ .../src/main/java/org/itas/util/XClassLoader.java  |  119 [32m++[m
+ utils/src/main/java/org/itas/util/XResources.java  |  137 [32m++[m
+ utils/src/main/java/org/itas/util/cache/Cache.java |   74 [32m+[m
+ .../main/java/org/itas/util/cache/CacheSizes.java  |  192 [32m+++[m
+ .../main/java/org/itas/util/cache/Cacheable.java   |   18 [32m+[m
+ .../itas/util/cache/CalculateSizeException.java    |   13 [32m+[m
+ .../main/java/org/itas/util/cache/LinkedList.java  |  115 [32m++[m
+ .../main/java/org/itas/util/cache/LocalCache.java  |  563 [32m++++++[m
+ .../org/itas/util/collection/CircularQueue.java    |  130 [32m++[m
+ .../java/org/itas/util/collection/IntHashMap.java  |  646 [32m+++++++[m
+ .../java/org/itas/util/collection/LimitList.java   |  156 [32m++[m
+ .../java/org/itas/util/collection/SortedList.java  |  192 [32m+++[m
+ .../main/java/org/itas/util/http/AbstractHttp.java |  417 [32m+++++[m
+ .../main/java/org/itas/util/http/HttpClient.java   |   52 [32m+[m
+ .../main/java/org/itas/util/http/HttpsClient.java  |   85 [32m+[m
+ .../java/org/itas/util/thread/ControlThread.java   |   89 [32m+[m
+ .../main/java/org/itas/util/thread/ThreadPool.java |  360 [32m++++[m
+ .../java/org/itas/util/thread/ThreadPoolDog.java   |   67 [32m+[m
+ utils/src/test/java/net/itas/util/TestClazzs.java  |    5 [32m+[m[31m-[m
+ 174 files changed, 11209 insertions(+), 9886 deletions(-)
+
+[33mcommit a18ef0c090f8f472daf6b89e4cc1ef130281aca1[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Fri Feb 6 17:43:49 2015 +0800
+
+    使用itas-buffer
+
+ core/.gitignore                                    |   2 [32m+[m
+ core/src/main/java/net/itas/core/Dispatch.java     |   3 [32m+[m[31m-[m
+ core/src/main/java/net/itas/core/Msg.java          | 147 [31m-----[m
+ core/src/main/java/net/itas/core/User.java         |  12 [32m+[m[31m-[m
+ .../main/java/net/itas/core/dispatch/Handle.java   |   3 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/ItasDispatch.java  |   3 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/JsonDispatch.java  |   3 [32m+[m[31m-[m
+ .../net/itas/core/dispatch/ProtocolDispatch.java   |   3 [32m+[m[31m-[m
+ .../java/net/itas/core/dispatch/XmlDispatch.java   |   3 [32m+[m[31m-[m
+ core/src/main/java/net/itas/core/io/Hosts.java     | 138 [31m-----[m
+ core/src/main/java/net/itas/core/io/IoUtil.java    | 114 [31m----[m
+ core/src/main/java/net/itas/core/io/Message.java   | 149 [31m-----[m
+ .../main/java/net/itas/core/io/ReceiveAble.java    |   6 [31m-[m
+ core/src/main/java/net/itas/core/io/SendAble.java  |   7 [31m-[m
+ .../main/java/net/itas/core/io/nio/Message.java    | 162 [31m------[m
+ .../java/net/itas/core/io/nio/MessageDecoder.java  |  63 [31m--[m
+ .../java/net/itas/core/io/nio/MessageEncoder.java  |  20 [31m-[m
+ .../net/itas/core/io/nio/NioChannelListener.java   |  33 [31m--[m
+ .../main/java/net/itas/core/io/nio/NioClient.java  |  79 [31m---[m
+ .../net/itas/core/io/nio/NioClientHandler.java     |  25 [31m-[m
+ .../net/itas/core/io/nio/NioClientInitializer.java |  19 [31m-[m
+ .../main/java/net/itas/core/io/nio/NioScene.java   | 134 [31m-----[m
+ .../java/net/itas/core/io/nio/NioSceneAll.java     | 351 [31m-----------[m
+ .../main/java/net/itas/core/io/nio/NioServer.java  |  60 [31m--[m
+ .../net/itas/core/io/nio/NioServerHandler.java     |  81 [31m---[m
+ .../net/itas/core/io/nio/NioServerInitializer.java |  20 [31m-[m
+ core/src/main/java/net/itas/core/io/rmi/Rmi.java   |  10 [31m-[m
+ .../main/java/net/itas/core/io/rmi/RmiClient.java  |  90 [31m---[m
+ .../main/java/net/itas/core/io/rmi/RmiServer.java  |  68 [31m---[m
+ .../main/java/net/itas/core/util/HttpClient.java   | 648 [31m---------------------[m
+ .../main/java/org/itas/buffer/AbstractMessage.java | 178 [32m++++++[m
+ .../main/java/org/itas/buffer/BubferBuilder.java   | 121 [32m++++[m
+ core/src/main/java/org/itas/buffer/NetAble.java    |  11 [32m+[m
+ .../src/main/java/org/itas/buffer/RecivedAble.java |  10 [32m+[m
+ core/src/main/java/org/itas/buffer/SendAble.java   |  19 [32m+[m
+ core/src/main/java/org/itas/buffer/Service.java    |  25 [32m+[m
+ core/src/main/java/org/itas/core/net/Hosts.java    | 138 [32m+++++[m
+ .../main/java/org/itas/core/net/nio/GameScene.java | 135 [32m+++++[m
+ .../main/java/org/itas/core/net/nio/GameWorld.java | 352 [32m+++++++++++[m
+ .../main/java/org/itas/core/net/nio/IoUtil.java    | 115 [32m++++[m
+ .../main/java/org/itas/core/net/nio/Message.java   | 153 [32m+++++[m
+ .../java/org/itas/core/net/nio/MessageDecoder.java |  63 [32m++[m
+ .../java/org/itas/core/net/nio/MessageEncoder.java |  20 [32m+[m
+ .../org/itas/core/net/nio/SessionListener.java     |  34 [32m++[m
+ .../org/itas/core/net/nio/client/NioClient.java    |  79 [32m+++[m
+ .../itas/core/net/nio/client/NioClientHandler.java |  60 [32m++[m
+ .../core/net/nio/client/NioClientInitializer.java  |  22 [32m+[m
+ .../org/itas/core/net/nio/server/NioServer.java    |  60 [32m++[m
+ .../itas/core/net/nio/server/NioServerHandler.java |  84 [32m+++[m
+ .../core/net/nio/server/NioServerInitializer.java  |  23 [32m+[m
+ core/src/main/java/org/itas/core/net/rmi/Rmi.java  |  10 [32m+[m
+ .../main/java/org/itas/core/net/rmi/RmiClient.java |  91 [32m+++[m
+ .../main/java/org/itas/core/net/rmi/RmiServer.java |  69 [32m+++[m
+ .../java/net/itas/core/io/rmi/TestExample.java     |   2 [32m+[m[31m-[m
+ .../test/java/net/itas/core/io/rmi/TestRemote.java |   5 [32m+[m[31m-[m
+ .../src/test/java/net/itas/core/mode/TestUser.java |   7 [31m-[m
+ utils/.gitignore                                   |   1 [32m+[m
+ utils/bin/.gitignore                               |   3 [32m+[m
+ utils/src/main/java/net/itas/util/Base64Coder.java | 128 [32m++++[m
+ .../main/java/net/itas/util/http/AbstractHttp.java | 417 [32m+++++++++++++[m
+ .../main/java/net/itas/util/http/HttpClient.java   |  52 [32m++[m
+ .../main/java/net/itas/util/http/HttpsClient.java  |  85 [32m+++[m
+ 62 files changed, 2583 insertions(+), 2445 deletions(-)
+
+[33mcommit 106af653629308b1148f813ab418f78dff9af563[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Feb 2 13:36:17 2015 +0800
+
+    ignore file
+
+ .gitignore | 6 [32m++++++[m
+ 1 file changed, 6 insertions(+)
+
+[33mcommit 189987eafeafa87b6edb379246839be4d0023daf[m
+Author: liuzhen <liuxing521a@163.com>
+Date:   Mon Feb 2 11:37:53 2015 +0800
+
+    init project
+
+ build.gradle                                       |   73 [32m+[m
+ core/build.gradle                                  |   50 [32m+[m
+ core/src/main/java/net/itas/core/CallBack.java     |    8 [32m+[m
+ core/src/main/java/net/itas/core/DataPool.java     |  261 [32m+++[m
+ core/src/main/java/net/itas/core/Dispatch.java     |   89 [32m+[m
+ core/src/main/java/net/itas/core/Factory.java      |   46 [32m+[m
+ core/src/main/java/net/itas/core/GameBase.java     |  164 [32m++[m
+ .../main/java/net/itas/core/GameBaseAotuID.java    |   20 [32m+[m
+ core/src/main/java/net/itas/core/GameObject.java   |   93 [32m+[m
+ core/src/main/java/net/itas/core/HashId.java       |   16 [32m+[m
+ core/src/main/java/net/itas/core/Hook.java         |   30 [32m+[m
+ core/src/main/java/net/itas/core/Msg.java          |  147 [32m++[m
+ core/src/main/java/net/itas/core/Pool.java         |   82 [32m+[m
+ core/src/main/java/net/itas/core/Rule.java         |   23 [32m+[m
+ core/src/main/java/net/itas/core/SQLCore.java      |  346 [32m++++[m
+ core/src/main/java/net/itas/core/SQLDirtys.java    |   85 [32m+[m
+ .../src/main/java/net/itas/core/SQLPersistent.java |  118 [32m++[m
+ core/src/main/java/net/itas/core/Script.java       |   54 [32m+[m
+ core/src/main/java/net/itas/core/Simple.java       |   72 [32m+[m
+ core/src/main/java/net/itas/core/User.java         |   98 [32m++[m
+ .../java/net/itas/core/annotation/CanNull.java     |   13 [32m+[m
+ .../main/java/net/itas/core/annotation/Clazz.java  |   12 [32m+[m
+ .../main/java/net/itas/core/annotation/Key.java    |   12 [32m+[m
+ .../java/net/itas/core/annotation/NamedArg.java    |   14 [32m+[m
+ .../java/net/itas/core/annotation/PrimaryfKey.java |   12 [32m+[m
+ .../java/net/itas/core/annotation/ReturnType.java  |   14 [32m+[m
+ .../main/java/net/itas/core/annotation/RmiRef.java |   15 [32m+[m
+ .../java/net/itas/core/annotation/SQLEntity.java   |   12 [32m+[m
+ .../main/java/net/itas/core/annotation/Size.java   |   12 [32m+[m
+ .../main/java/net/itas/core/annotation/UnSave.java |   19 [32m+[m
+ .../java/net/itas/core/bytecode/ByteCodes.java     |  920 [32m++++++++++[m
+ .../main/java/net/itas/core/dispatch/Handle.java   |   29 [32m+[m
+ .../java/net/itas/core/dispatch/HookDispatch.java  |   31 [32m+[m
+ .../java/net/itas/core/dispatch/ItasDispatch.java  |   57 [32m+[m
+ .../java/net/itas/core/dispatch/JsonDispatch.java  |   30 [32m+[m
+ .../net/itas/core/dispatch/ProtocolDispatch.java   |   29 [32m+[m
+ .../java/net/itas/core/dispatch/XmlDispatch.java   |   29 [32m+[m
+ core/src/main/java/net/itas/core/enums/EByte.java  |    8 [32m+[m
+ core/src/main/java/net/itas/core/enums/EInt.java   |    8 [32m+[m
+ .../src/main/java/net/itas/core/enums/EString.java |    8 [32m+[m
+ .../net/itas/core/exception/DoubleException.java   |   27 [32m+[m
+ .../core/exception/FieldNotConfigException.java    |   27 [32m+[m
+ .../net/itas/core/exception/UnDeFineException.java |   27 [32m+[m
+ core/src/main/java/net/itas/core/io/Hosts.java     |  138 [32m++[m
+ core/src/main/java/net/itas/core/io/IoUtil.java    |  114 [32m++[m
+ core/src/main/java/net/itas/core/io/Message.java   |  149 [32m++[m
+ .../main/java/net/itas/core/io/ReceiveAble.java    |    6 [32m+[m
+ core/src/main/java/net/itas/core/io/SendAble.java  |    7 [32m+[m
+ .../main/java/net/itas/core/io/nio/Message.java    |  162 [32m++[m
+ .../java/net/itas/core/io/nio/MessageDecoder.java  |   63 [32m+[m
+ .../java/net/itas/core/io/nio/MessageEncoder.java  |   20 [32m+[m
+ .../net/itas/core/io/nio/NioChannelListener.java   |   33 [32m+[m
+ .../main/java/net/itas/core/io/nio/NioClient.java  |   79 [32m+[m
+ .../net/itas/core/io/nio/NioClientHandler.java     |   25 [32m+[m
+ .../net/itas/core/io/nio/NioClientInitializer.java |   19 [32m+[m
+ .../main/java/net/itas/core/io/nio/NioScene.java   |  134 [32m++[m
+ .../java/net/itas/core/io/nio/NioSceneAll.java     |  351 [32m++++[m
+ .../main/java/net/itas/core/io/nio/NioServer.java  |   60 [32m+[m
+ .../net/itas/core/io/nio/NioServerHandler.java     |   81 [32m+[m
+ .../net/itas/core/io/nio/NioServerInitializer.java |   20 [32m+[m
+ core/src/main/java/net/itas/core/io/rmi/Rmi.java   |   10 [32m+[m
+ .../main/java/net/itas/core/io/rmi/RmiClient.java  |   90 [32m+[m
+ .../main/java/net/itas/core/io/rmi/RmiServer.java  |   68 [32m+[m
+ core/src/main/java/net/itas/core/jdbc/DBPool.java  |   42 [32m+[m
+ .../main/java/net/itas/core/jdbc/DBTemplete.java   |  194 [32m+++[m
+ .../main/java/net/itas/core/jdbc/DataSource.java   |   57 [32m+[m
+ .../src/main/java/net/itas/core/jdbc/JdbcType.java |  259 [32m+++[m
+ .../main/java/net/itas/core/jdbc/RowMapper.java    |   10 [32m+[m
+ .../net/itas/core/resource/AbstractHandler.java    |   69 [32m+[m
+ .../java/net/itas/core/resource/AbstractXml.java   |   72 [32m+[m
+ .../src/main/java/net/itas/core/resource/Conf.java |    6 [32m+[m
+ .../main/java/net/itas/core/resource/HostRes.java  |   50 [32m+[m
+ .../main/java/net/itas/core/resource/ResPool.java  |  134 [32m++[m
+ .../main/java/net/itas/core/resource/Resource.java |   72 [32m+[m
+ .../net/itas/core/resource/XConfigHandler.java     |  117 [32m++[m
+ .../net/itas/core/resource/XResourceHandler.java   |   59 [32m+[m
+ .../main/java/net/itas/core/util/GameObjects.java  |  322 [32m++++[m
+ .../main/java/net/itas/core/util/GenericUtil.java  |  191 [32m+++[m
+ .../main/java/net/itas/core/util/HttpClient.java   |  648 [32m+++++++[m
+ .../main/java/net/itas/core/util/JsonParser.java   |  117 [32m++[m
+ .../main/java/net/itas/core/util/UUIDUtils.java    |   25 [32m+[m
+ core/src/main/java/net/itas/core/util/Utils.java   |  333 [32m++++[m
+ core/src/main/resources/application.conf           |   40 [32m+[m
+ core/src/main/resources/logback-test.xml           |   74 [32m+[m
+ core/src/test/java/net/itas/core/TestAll.java      |   17 [32m+[m
+ .../src/test/java/net/itas/core/TestByteCodes.java |   42 [32m+[m
+ .../java/net/itas/core/io/rmi/TestExample.java     |   12 [32m+[m
+ .../net/itas/core/io/rmi/TestExampleImple.java     |   27 [32m+[m
+ .../test/java/net/itas/core/io/rmi/TestRemote.java |   34 [32m+[m
+ .../src/test/java/net/itas/core/mode/TestUser.java |  204 [32m+++[m
+ gradle/wrapper/gradle-wrapper.properties           |    6 [32m+[m
+ gradlew                                            |  164 [32m++[m
+ gradlew.bat                                        |   90 [32m+[m
+ settings.gradle                                    |    1 [32m+[m
+ utils/build.gradle                                 |   51 [32m+[m
+ utils/src/main/java/net/itas/util/GUID.java        |   89 [32m+[m
+ utils/src/main/java/net/itas/util/GenericInfo.java |   85 [32m+[m
+ .../src/main/java/net/itas/util/ItasException.java |   27 [32m+[m
+ utils/src/main/java/net/itas/util/Logger.java      |  181 [32m++[m
+ utils/src/main/java/net/itas/util/Pair.java        |   59 [32m+[m
+ .../main/java/net/itas/util/ScheduledExecutor.java |  117 [32m++[m
+ utils/src/main/java/net/itas/util/TextUtils.java   |    5 [32m+[m
+ utils/src/main/java/net/itas/util/Utils.java       | 1802 [32m++++++++++++++++++++[m
+ .../src/main/java/net/itas/util/XClassLoader.java  |  119 [32m++[m
+ utils/src/main/java/net/itas/util/XResources.java  |  137 [32m++[m
+ utils/src/main/java/net/itas/util/cache/Cache.java |   74 [32m+[m
+ .../main/java/net/itas/util/cache/CacheSizes.java  |  192 [32m+++[m
+ .../main/java/net/itas/util/cache/Cacheable.java   |   18 [32m+[m
+ .../itas/util/cache/CalculateSizeException.java    |   13 [32m+[m
+ .../main/java/net/itas/util/cache/LinkedList.java  |  115 [32m++[m
+ .../main/java/net/itas/util/cache/LocalCache.java  |  563 [32m++++++[m
+ .../net/itas/util/collection/CircularQueue.java    |  130 [32m++[m
+ .../java/net/itas/util/collection/IntHashMap.java  |  646 [32m+++++++[m
+ .../java/net/itas/util/collection/LimitList.java   |  156 [32m++[m
+ .../java/net/itas/util/collection/SortedList.java  |  192 [32m+++[m
+ .../java/net/itas/util/thread/ControlThread.java   |   89 [32m+[m
+ .../main/java/net/itas/util/thread/ThreadPool.java |  360 [32m++++[m
+ .../java/net/itas/util/thread/ThreadPoolDog.java   |   67 [32m+[m
+ utils/src/main/resources/logback-test.xml          |   96 [32m++[m
+ utils/src/main/resources/logback-test.xml.file     |  154 [32m++[m
+ utils/src/test/java/net/itas/util/TestAll.java     |   13 [32m+[m
+ utils/src/test/java/net/itas/util/TestClazzs.java  |   66 [32m+[m
+ 122 files changed, 13973 insertions(+)
+
+[33mcommit 792d84e469f67f1e84cc1138a6a1d588e50d9fa5[m
+Author: liuxing521a <liuxing521a@163.com>
+Date:   Mon Feb 2 11:31:36 2015 +0800
+
+    Initial commit
+
+ .gitignore |  12 [32m++++[m
+ LICENSE    | 202 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ README.md  |   2 [32m+[m
+ 3 files changed, 216 insertions(+)

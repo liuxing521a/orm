@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SkinConf>
+    <!-- 默认地板 -->
+    <skinCellList>skin-10000|skin-10600|skin-10700</skinCellList>
+    <!-- 默认墙 -->
+    <skinWallList>skin-10100|skin-10101|skin-10200|skin-10300|skin-10400</skinWallList>
+    <!-- 默认柱子 -->
+    <skinPillarList>skin-10500</skinPillarList>
+    <!-- 默认地图边缘 -->
+    <skinBackList>skin-40000</skinBackList>
+    <!-- 不能换元素列表 -->
+    <noChangeSkins>skin-10100|skin-10700|skin-40000</noChangeSkins>
+</SkinConf>

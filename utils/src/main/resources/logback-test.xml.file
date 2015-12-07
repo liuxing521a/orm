@@ -1,0 +1,154 @@
+<configuration>
+	<appender name="log-trace"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/trace.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>TRACE</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/trace.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>1</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-debug"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/debug.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/debug.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>7</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-info"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/info.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/info.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>7</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-charge"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/charge.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/charge.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>7</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-record"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/record.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/charge.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>15</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-warn"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/warn.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>7</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="log-error"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/error.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.dir}/error.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>7</MaxHistory>
+		</rollingPolicy>
+	</appender>
+
+
+	<!-- <logger name="com.jolbox.bonecp" additivity="false" level="TRACE"> 
+		<appender-ref ref="log-debug" /> </logger> -->
+
+	<logger name="log-trace" additivity="false" level="TRACE">
+		<appender-ref ref="log-trace" />
+	</logger>
+
+	<logger name="log-debug" additivity="false" level="DEBUG">
+		<appender-ref ref="log-debug" />
+	</logger>
+
+	<logger name="log-info" additivity="false" level="INFO">
+		<appender-ref ref="log-info" />
+	</logger>
+
+	<logger name="log-charge" additivity="false" level="INFO">
+		<appender-ref ref="log-charge" />
+	</logger>
+	
+	<logger name="log-record" additivity="false" level="INFO">
+		<appender-ref ref="log-record" />
+	</logger>
+
+	<logger name="log-warn" additivity="false" level="WARN">
+		<appender-ref ref="log-warn" />
+	</logger>
+
+	<logger name="log-error" additivity="false" level="ERROR">
+		<appender-ref ref="log-error" />
+	</logger>
+
+
+	<!-- <root level="INFO"> <appender-ref ref="FILE" /> </root> -->
+</configuration>

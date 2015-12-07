@@ -1,0 +1,96 @@
+<configuration>
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                         <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+                </encoder>
+        </appender>
+
+ 		<appender name="log-trace" class="ch.qos.logback.core.ConsoleAppender">
+               <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+				    <level>TRACE</level>  
+				    <onMatch>ACCEPT</onMatch>  
+				    <onMismatch>DENY</onMismatch>  
+				</filter>  
+        </appender>	
+        <appender name="log-debug" class="ch.qos.logback.core.ConsoleAppender">
+               <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+				    <level>DEBUG</level>  
+				    <onMatch>ACCEPT</onMatch>  
+				    <onMismatch>DENY</onMismatch>  
+				</filter>  
+        </appender>	
+        <appender name="log-info" class="ch.qos.logback.core.ConsoleAppender">
+               <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+				    <level>INFO</level>  
+				    <onMatch>ACCEPT</onMatch>  
+				    <onMismatch>DENY</onMismatch>  
+				</filter>  
+        </appender>
+        <appender name="log-error"  class="ch.qos.logback.core.ConsoleAppender">
+               <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                         <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+				    <level>ERROR</level>  
+				    <onMatch>ACCEPT</onMatch>  
+				    <onMismatch>DENY</onMismatch>  
+				</filter>  
+        </appender>
+
+    <appender name="log-charge"  class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    
+    <appender name="log-record"  class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}[%thread][%-5level]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+       
+<!--         <logger name="com.jolbox.bonecp" additivity="false" level="TRACE"> -->
+<!--         	 <appender-ref ref="log-debug" /> -->
+<!--         </logger> -->
+        
+        <logger name="log-trace" additivity="false" level="TRACE">
+			<appender-ref ref="log-trace" />
+		</logger>
+		
+		<logger name="log-debug" additivity="false" level="DEBUG">
+			<appender-ref ref="log-debug" />
+		</logger>
+
+        <logger name="log-info" additivity="false" level="INFO">
+			<appender-ref ref="log-info" />
+		</logger>
+		
+		<logger name="log-error" additivity="false" level="ERROR">
+			<appender-ref ref="log-error" />
+		</logger>
+		
+
+        <root level="INFO">
+                <appender-ref ref="STDOUT" />
+        </root>
+</configuration>

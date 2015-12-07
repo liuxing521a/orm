@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HeroResList>
+<HeroRes Id="hero-01" name="孙悟空" effects="effect-hero-011|effect-hero-012" weapon="skin-21101" head="skin-21201" body="skin-21301" adorn="skin-21401" />
+<HeroRes Id="hero-02" name="猪八戒" effects="effect-hero-021" weapon="skin-22101" head="skin-22201" body="skin-22301" adorn="skin-22401" />
+<HeroRes Id="hero-03" name="沙僧" effects="effect-hero-031" weapon="skin-24101" head="skin-24201" body="skin-24301" adorn="skin-24401" />
+<HeroRes Id="hero-04" name="小白龙" effects="effect-hero-041|effect-hero-042" weapon="skin-25101" head="skin-25201" body="skin-25301" adorn="skin-25401" />
+<HeroRes Id="hero-05" name="唐僧" effects="effect-hero-051" weapon="skin-23101" head="skin-23201" body="skin-23301" adorn="skin-23401" />
+<HeroRes Id="hero-06" name="牛魔王" effects="effect-hero-071" weapon="skin-26101" head="skin-26201" body="skin-26301" adorn="skin-26401" />
+<HeroRes Id="hero-07" name="铁扇公主" effects="effect-hero-091" weapon="skin-27101" head="skin-27201" body="skin-27301" adorn="skin-27401" />
+<HeroRes Id="hero-08" name="红孩儿" effects="effect-hero-061" weapon="skin-28101" head="skin-28201" body="skin-28301" adorn="skin-28401" />
+<HeroRes Id="hero-09" name="白骨精" effects="effect-hero-081" weapon="skin-29101" head="skin-29201" body="skin-29301" adorn="skin-29401" />
+<HeroRes Id="hero-10" name="嫦娥" effects="" weapon="skin-30101" head="skin-30201" body="skin-30301" adorn="skin-30401" />
+<HeroRes Id="hero-11" name="蜘蛛精" effects="" weapon="skin-31101" head="skin-31201" body="skin-31301" adorn="skin-31401" />
+</HeroResList>

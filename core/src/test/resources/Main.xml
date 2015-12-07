@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<!-- 端口 -->
+	<port>8081</port>
+	<!-- 同步数据库间隔时间[秒] -->
+	<interval>1</interval>
+	<!-- cache中元素过期时间[小时] -->
+	<aliveTime>72</aliveTime>
+	<!-- cache缓存大小[M|G] -->
+	<aliveTime>1024M</aliveTime>
+	<!-- 是否开发环境 -->
+	<develop>true</develop>
+	<DB name="main" >
+		<url>jdbc:mysql://127.0.0.1:3306/auweb?characterEncoding=utf8</url>
+		<userName>root</userName>
+		<password>123456</password>
+		<partitionCount>1</partitionCount>
+		<minConnPerPart>1</minConnPerPart>
+		<maxConnPerPart>2</maxConnPerPart>
+		<acquireIncrement>1</acquireIncrement>
+		<poolAvailabilityThreshold>1</poolAvailabilityThreshold>
+	</DB>
+	<DB name="log" >
+		<url>jdbc:mysql://127.0.0.1:3306/log?characterEncoding=utf8</url>
+		<userName>root</userName>
+		<password>123456</password>
+		<partitionCount>1</partitionCount>
+		<minConnPerPart>1</minConnPerPart>
+		<maxConnPerPart>2</maxConnPerPart>
+		<acquireIncrement>1</acquireIncrement>
+		<poolAvailabilityThreshold>1</poolAvailabilityThreshold>
+	</DB>
+</Main>

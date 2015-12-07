@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+//sourceSets.main.java.srcDirs = [ 'java/', 'resources/', 'test' ]
+
+ext {
+    archiveBaseName = 'core'
+}
+
+eclipse.project {
+  name = appName + '-' + archiveBaseName
+}
+
+defaultTasks 'packJar'
+jar {
+    baseName = archiveBaseName
+	dependsOn classes 
+	exclude('com/itans/core/**/*Test*') 
+	//include('com/itans/core/**/*Test*') 
+	manifest{attributes 'title': archiveBaseName, 'version': version, 'createTime': new Date()} 
+}
+
+task sourcesJar(type: Jar) {  
+	baseName archiveBaseName
+    classifier = 'sources' 
+    destinationDir = file('build/libs') 
+    exclude('com/itans/core/**/*Test*')  
+    from sourceSets.main.allSource  
+} 
+
+task packJar(dependsOn: ['clean', 'jar', 'sourcesJar']){
+
+}
+
+artifacts {
+	archives jar
+	archives sourcesJar
+	archives file('build/libs/' + archiveBaseName + '-' + version + '.jar')
+	archives file('build/libs/' + archiveBaseName + '-' + version + '-sources.jar')
+}
+
+uploadArchives {
+	repositories.mavenDeployer {
+		repository(id : 'libs', url : 'http://192.168.1.200:8081/nexus/content/repositories/libs') {
+      		authentication (userName : 'deployment', password : 'aojia2013')
+    	}
+  	}
+}
